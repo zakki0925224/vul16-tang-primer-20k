@@ -17,8 +17,7 @@ module Top(
     output wire [5:0] lcd_g,
     output wire [4:0] lcd_b
 );
-    wire [7:0] mmio_out;
-    wire [15:0] mmio_out_addr;
+    wire [15:0] inst;
 
     Core core (
         .clock(clock),
@@ -33,17 +32,27 @@ module Top(
         .io_gpRegs_5(),
         .io_gpRegs_6(),
         .io_gpRegs_7(),
-        .io_mmioInAddr(16'h0),
-        .io_mmioIn(8'h0),
-        .io_mmioOut(mmio_out),
-        .io_mmioOutAddr(mmio_out_addr)
+        .io_memInst(inst),
+        .io_debug_halt(),
+        .io_debug_step()
     );
 
-    Led led_ (
+    Memory memory (
         .clock(clock),
         .reset(reset),
-        .mmio_out_addr(mmio_out_addr),
-        .mmio_out(mmio_out),
+        .data_addr(core.io_memDataAddr),
+        .data_in(core.io_memDataIn),
+        .data_out(core.io_memDataOut),
+        .data_write(core.io_memDataWrite),
+        .inst_addr(core.io_memInst),
+        .inst_out(inst)
+    );
+
+    Led _led (
+        .clock(clock),
+        .reset(reset),
+        .mmio_addr(core.io_memDataAddr),
+        .mmio_data(core.io_memDataIn),
         .led(led)
     );
 endmodule
