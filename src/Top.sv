@@ -17,12 +17,18 @@ module Top(
     output wire [5:0] lcd_g,
     output wire [4:0] lcd_b
 );
+    wire [15:0] instAddr;
     wire [15:0] inst;
+
+    wire [15:0] memDataAddr;
+    wire [7:0] memDataIn;
+    wire [7:0] memDataOut;
+    wire memDataWrite;
 
     Core core (
         .clock(clock),
         .reset(reset),
-        .io_pc(),
+        .io_pc(instAddr),
         .io_inst(),
         .io_gpRegs_0(),
         .io_gpRegs_1(),
@@ -32,6 +38,10 @@ module Top(
         .io_gpRegs_5(),
         .io_gpRegs_6(),
         .io_gpRegs_7(),
+        .io_memDataAddr(memDataAddr),
+        .io_memDataIn(memDataIn),
+        .io_memDataOut(memDataOut),
+        .io_memDataWrite(memDataWrite),
         .io_memInst(inst),
         .io_debug_halt(),
         .io_debug_step()
@@ -40,20 +50,29 @@ module Top(
     Memory memory (
         .clock(clock),
         .reset(reset),
-        .data_addr(core.io_memDataAddr),
-        .data_in(core.io_memDataIn),
-        .data_out(core.io_memDataOut),
-        .data_write(core.io_memDataWrite),
-        .inst_addr(core.io_memInst),
+        .data_addr(memDataAddr),
+        .data_in(memDataIn),
+        .data_out(memDataOut),
+        .data_write(memDataWrite),
+        .inst_addr(instAddr),
         .inst_out(inst)
     );
 
     Led _led (
         .clock(clock),
         .reset(reset),
-        .mmio_addr(core.io_memDataAddr),
-        .mmio_data(core.io_memDataIn),
+        .mmio_addr(memDataAddr),
+        .mmio_data(memDataIn),
         .led(led)
+    );
+
+    Uart uart (
+        .clock(clock),
+        .reset(reset),
+        .mmio_addr(memDataAddr),
+        .mmio_data(memDataIn),
+        .mmio_update(memDataWrite),
+        .tx(uart_tx)
     );
 endmodule
 

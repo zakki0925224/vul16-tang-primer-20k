@@ -8,11 +8,11 @@ module Led(
     output wire [5:0] led
 );
     reg [5:0] led_reg;
-    assign led = led_reg;
+    assign led = ~led_reg;
 
     always @(posedge clock or posedge reset) begin
         if (reset) begin
-            led_reg <= 6'b101010;
+            led_reg <= 6'b00000;
         end else if (mmio_addr == 16'hf000) begin
             led_reg <= mmio_data[5:0];
         end
