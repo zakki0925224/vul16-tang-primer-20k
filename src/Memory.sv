@@ -49,7 +49,7 @@ module Memory(
     always @* begin
         dpb_data_in = dpb_data_out_data_reg;
         dpb_write_en = 1'b0;
-        if (data_write) begin
+        if (data_write && data_addr < 16'h8000) begin // max data address is 0x7FFF
             dpb_write_en = 1'b1;
             if (data_addr[0] == 1'b0) begin
                 dpb_data_in = {dpb_data_out_data_reg[15:8], data_in};

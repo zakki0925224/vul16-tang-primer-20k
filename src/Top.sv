@@ -15,7 +15,12 @@ module Top(
     output wire lcd_vs,
     output wire [4:0] lcd_r,
     output wire [5:0] lcd_g,
-    output wire [4:0] lcd_b
+    output wire [4:0] lcd_b,
+
+    input wire btn_s1,
+    input wire btn_s2,
+    input wire btn_s3,
+    input wire btn_s4
 );
     wire [15:0] instAddr;
     wire [15:0] inst;
@@ -43,8 +48,8 @@ module Top(
         .io_memDataOut(memDataOut),
         .io_memDataWrite(memDataWrite),
         .io_memInst(inst),
-        .io_debug_halt(),
-        .io_debug_step()
+        .io_debug_halt(btn_s1),
+        .io_debug_step(btn_s2)
     );
 
     Memory memory (
