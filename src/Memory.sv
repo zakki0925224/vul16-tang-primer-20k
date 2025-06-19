@@ -19,7 +19,6 @@ module Memory(
     reg [15:0] dpb_data_in;
     reg dpb_write_en;
 
-    reg [15:0] dpb_data_out_data_reg;
     wire [15:0] dpb_data_out_data;
     wire [15:0] dpb_data_out_inst;
 
@@ -43,18 +42,17 @@ module Memory(
     );
 
     always @(posedge clock) begin
-        dpb_data_out_data_reg <= dpb_data_out_data;
-    end
-
-    always @* begin
-        dpb_data_in = dpb_data_out_data_reg;
-        dpb_write_en = 1'b0;
-        if (data_write && data_addr < 16'h8000) begin // max data address is 0x7FFF
-            dpb_write_en = 1'b1;
-            if (data_addr[0] == 1'b0) begin
-                dpb_data_in = {dpb_data_out_data_reg[15:8], data_in};
-            end else begin
-                dpb_data_in = {data_in, dpb_data_out_data_reg[7:0]};
+        if (reset) begin
+            dpb_write_en <= 1'b0;
+        end else begin
+            dpb_write_en <= 1'b0;
+            if (data_write && data_addr < 16'h8000) begin
+                dpb_write_en <= 1'b1;
+                if (data_addr[0] == 1'b0) begin
+                    dpb_data_in <= {dpb_data_out_data[15:8], data_in};
+                end else begin
+                    dpb_data_in <= {data_in, dpb_data_out_data[7:0]};
+                end
             end
         end
     end

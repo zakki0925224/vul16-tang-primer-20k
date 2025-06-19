@@ -9,3 +9,7 @@
 
 // 27MHz
 create_clock -name clock -period 37.037 -waveform {0 18.518} [get_ports {clock}]
+
+// 5MHz
+create_clock -name tck_pad_i -period 200 -waveform {0 100} [get_ports {tck_pad_i}]
+set_clock_groups -asynchronous -group [get_clocks {clock}] -group [get_clocks {tck_pad_i}]

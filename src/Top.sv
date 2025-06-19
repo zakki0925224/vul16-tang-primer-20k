@@ -48,8 +48,8 @@ module Top(
         .io_memDataOut(memDataOut),
         .io_memDataWrite(memDataWrite),
         .io_memInst(inst),
-        .io_debug_halt(btn_s1),
-        .io_debug_step(btn_s2)
+        .io_debug_halt(),
+        .io_debug_step()
     );
 
     Memory memory (

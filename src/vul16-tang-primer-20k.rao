@@ -1,0 +1,216 @@
+<?xml version="1" encoding="UTF-8"?>
+<GAO_CONFIG>
+    <Version>3.0</Version>
+    <Mode>Standard</Mode>
+    <AoCore index="0" sample_clock="clock" trig_type="0" storage_depth="1024" window_num="1" capture_amount="1024" implementation="0" trigger_pos="0" module_name="Top" force_trigger_by_falling_edge="false" capture_init_data_enabled="false">
+        <SignalList>
+            <Signal capture_enable="true">reset</Signal>
+            <Bus capture_enable="true" name="instAddr[15:0]">
+                <Signal>instAddr[15]</Signal>
+                <Signal>instAddr[14]</Signal>
+                <Signal>instAddr[13]</Signal>
+                <Signal>instAddr[12]</Signal>
+                <Signal>instAddr[11]</Signal>
+                <Signal>instAddr[10]</Signal>
+                <Signal>instAddr[9]</Signal>
+                <Signal>instAddr[8]</Signal>
+                <Signal>instAddr[7]</Signal>
+                <Signal>instAddr[6]</Signal>
+                <Signal>instAddr[5]</Signal>
+                <Signal>instAddr[4]</Signal>
+                <Signal>instAddr[3]</Signal>
+                <Signal>instAddr[2]</Signal>
+                <Signal>instAddr[1]</Signal>
+                <Signal>instAddr[0]</Signal>
+            </Bus>
+            <Bus capture_enable="true" name="inst[15:0]">
+                <Signal>inst[15]</Signal>
+                <Signal>inst[14]</Signal>
+                <Signal>inst[13]</Signal>
+                <Signal>inst[12]</Signal>
+                <Signal>inst[11]</Signal>
+                <Signal>inst[10]</Signal>
+                <Signal>inst[9]</Signal>
+                <Signal>inst[8]</Signal>
+                <Signal>inst[7]</Signal>
+                <Signal>inst[6]</Signal>
+                <Signal>inst[5]</Signal>
+                <Signal>inst[4]</Signal>
+                <Signal>inst[3]</Signal>
+                <Signal>inst[2]</Signal>
+                <Signal>inst[1]</Signal>
+                <Signal>inst[0]</Signal>
+            </Bus>
+            <Bus capture_enable="true" name="memDataAddr[15:0]">
+                <Signal>memDataAddr[15]</Signal>
+                <Signal>memDataAddr[14]</Signal>
+                <Signal>memDataAddr[13]</Signal>
+                <Signal>memDataAddr[12]</Signal>
+                <Signal>memDataAddr[11]</Signal>
+                <Signal>memDataAddr[10]</Signal>
+                <Signal>memDataAddr[9]</Signal>
+                <Signal>memDataAddr[8]</Signal>
+                <Signal>memDataAddr[7]</Signal>
+                <Signal>memDataAddr[6]</Signal>
+                <Signal>memDataAddr[5]</Signal>
+                <Signal>memDataAddr[4]</Signal>
+                <Signal>memDataAddr[3]</Signal>
+                <Signal>memDataAddr[2]</Signal>
+                <Signal>memDataAddr[1]</Signal>
+                <Signal>memDataAddr[0]</Signal>
+            </Bus>
+            <Bus capture_enable="true" name="memDataIn[7:0]">
+                <Signal>memDataIn[7]</Signal>
+                <Signal>memDataIn[6]</Signal>
+                <Signal>memDataIn[5]</Signal>
+                <Signal>memDataIn[4]</Signal>
+                <Signal>memDataIn[3]</Signal>
+                <Signal>memDataIn[2]</Signal>
+                <Signal>memDataIn[1]</Signal>
+                <Signal>memDataIn[0]</Signal>
+            </Bus>
+            <Bus capture_enable="true" name="memDataOut[7:0]">
+                <Signal>memDataOut[7]</Signal>
+                <Signal>memDataOut[6]</Signal>
+                <Signal>memDataOut[5]</Signal>
+                <Signal>memDataOut[4]</Signal>
+                <Signal>memDataOut[3]</Signal>
+                <Signal>memDataOut[2]</Signal>
+                <Signal>memDataOut[1]</Signal>
+                <Signal>memDataOut[0]</Signal>
+            </Bus>
+            <Signal capture_enable="true">memDataWrite</Signal>
+            <Bus capture_enable="true" name="memory/inst_addr[15:0]">
+                <Signal>memory/inst_addr[15]</Signal>
+                <Signal>memory/inst_addr[14]</Signal>
+                <Signal>memory/inst_addr[13]</Signal>
+                <Signal>memory/inst_addr[12]</Signal>
+                <Signal>memory/inst_addr[11]</Signal>
+                <Signal>memory/inst_addr[10]</Signal>
+                <Signal>memory/inst_addr[9]</Signal>
+                <Signal>memory/inst_addr[8]</Signal>
+                <Signal>memory/inst_addr[7]</Signal>
+                <Signal>memory/inst_addr[6]</Signal>
+                <Signal>memory/inst_addr[5]</Signal>
+                <Signal>memory/inst_addr[4]</Signal>
+                <Signal>memory/inst_addr[3]</Signal>
+                <Signal>memory/inst_addr[2]</Signal>
+                <Signal>memory/inst_addr[1]</Signal>
+                <Signal>memory/inst_addr[0]</Signal>
+            </Bus>
+            <Bus capture_enable="true" name="memory/inst_out[15:0]">
+                <Signal>memory/inst_out[15]</Signal>
+                <Signal>memory/inst_out[14]</Signal>
+                <Signal>memory/inst_out[13]</Signal>
+                <Signal>memory/inst_out[12]</Signal>
+                <Signal>memory/inst_out[11]</Signal>
+                <Signal>memory/inst_out[10]</Signal>
+                <Signal>memory/inst_out[9]</Signal>
+                <Signal>memory/inst_out[8]</Signal>
+                <Signal>memory/inst_out[7]</Signal>
+                <Signal>memory/inst_out[6]</Signal>
+                <Signal>memory/inst_out[5]</Signal>
+                <Signal>memory/inst_out[4]</Signal>
+                <Signal>memory/inst_out[3]</Signal>
+                <Signal>memory/inst_out[2]</Signal>
+                <Signal>memory/inst_out[1]</Signal>
+                <Signal>memory/inst_out[0]</Signal>
+            </Bus>
+            <Bus capture_enable="true" name="memory/dpb_addr_data[14:0]">
+                <Signal>memory/dpb_addr_data[14]</Signal>
+                <Signal>memory/dpb_addr_data[13]</Signal>
+                <Signal>memory/dpb_addr_data[12]</Signal>
+                <Signal>memory/dpb_addr_data[11]</Signal>
+                <Signal>memory/dpb_addr_data[10]</Signal>
+                <Signal>memory/dpb_addr_data[9]</Signal>
+                <Signal>memory/dpb_addr_data[8]</Signal>
+                <Signal>memory/dpb_addr_data[7]</Signal>
+                <Signal>memory/dpb_addr_data[6]</Signal>
+                <Signal>memory/dpb_addr_data[5]</Signal>
+                <Signal>memory/dpb_addr_data[4]</Signal>
+                <Signal>memory/dpb_addr_data[3]</Signal>
+                <Signal>memory/dpb_addr_data[2]</Signal>
+                <Signal>memory/dpb_addr_data[1]</Signal>
+                <Signal>memory/dpb_addr_data[0]</Signal>
+            </Bus>
+            <Bus capture_enable="true" name="memory/dpb_addr_inst[14:0]">
+                <Signal>memory/dpb_addr_inst[14]</Signal>
+                <Signal>memory/dpb_addr_inst[13]</Signal>
+                <Signal>memory/dpb_addr_inst[12]</Signal>
+                <Signal>memory/dpb_addr_inst[11]</Signal>
+                <Signal>memory/dpb_addr_inst[10]</Signal>
+                <Signal>memory/dpb_addr_inst[9]</Signal>
+                <Signal>memory/dpb_addr_inst[8]</Signal>
+                <Signal>memory/dpb_addr_inst[7]</Signal>
+                <Signal>memory/dpb_addr_inst[6]</Signal>
+                <Signal>memory/dpb_addr_inst[5]</Signal>
+                <Signal>memory/dpb_addr_inst[4]</Signal>
+                <Signal>memory/dpb_addr_inst[3]</Signal>
+                <Signal>memory/dpb_addr_inst[2]</Signal>
+                <Signal>memory/dpb_addr_inst[1]</Signal>
+                <Signal>memory/dpb_addr_inst[0]</Signal>
+            </Bus>
+        </SignalList>
+        <Triggers>
+            <Trigger index="0">
+                <SignalList>
+                    <Bus restorename="core/io_pc[15:0]">
+                        <Signal>core/io_pc[15]</Signal>
+                        <Signal>core/io_pc[14]</Signal>
+                        <Signal>core/io_pc[13]</Signal>
+                        <Signal>core/io_pc[12]</Signal>
+                        <Signal>core/io_pc[11]</Signal>
+                        <Signal>core/io_pc[10]</Signal>
+                        <Signal>core/io_pc[9]</Signal>
+                        <Signal>core/io_pc[8]</Signal>
+                        <Signal>core/io_pc[7]</Signal>
+                        <Signal>core/io_pc[6]</Signal>
+                        <Signal>core/io_pc[5]</Signal>
+                        <Signal>core/io_pc[4]</Signal>
+                        <Signal>core/io_pc[3]</Signal>
+                        <Signal>core/io_pc[2]</Signal>
+                        <Signal>core/io_pc[1]</Signal>
+                        <Signal>core/io_pc[0]</Signal>
+                    </Bus>
+                </SignalList>
+            </Trigger>
+            <Trigger index="1"/>
+            <Trigger index="2"/>
+            <Trigger index="3"/>
+            <Trigger index="4"/>
+            <Trigger index="5"/>
+            <Trigger index="6"/>
+            <Trigger index="7"/>
+            <Trigger index="8"/>
+            <Trigger index="9"/>
+            <Trigger index="10"/>
+            <Trigger index="11"/>
+            <Trigger index="12"/>
+            <Trigger index="13"/>
+            <Trigger index="14"/>
+            <Trigger index="15"/>
+        </Triggers>
+        <MatchUnits>
+            <MatchUnit index="0" enabled="1" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="0000000000000000" value1="0000000000000000" trigger="0"/>
+            <MatchUnit index="1" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="2" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="3" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="4" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="5" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="6" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="7" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="8" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="9" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="10" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="11" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="12" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="13" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="14" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+            <MatchUnit index="15" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
+        </MatchUnits>
+        <Expressions type="Static">
+            <Expression>M0</Expression>
+        </Expressions>
+    </AoCore>
+    <GAO_ID>1001001101110111</GAO_ID>
+</GAO_CONFIG>
