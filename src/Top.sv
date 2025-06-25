@@ -1,6 +1,10 @@
 `default_nettype none
 
-module Top(
+module Top
+#(
+    parameter ROM_SIZE = 256
+)
+(
     input wire clock,
     input wire reset,
 
@@ -22,18 +26,24 @@ module Top(
     input wire btn_s3,
     input wire btn_s4
 );
-    wire [15:0] instAddr;
+    reg [7:0] rom [0:ROM_SIZE-1];
+    reg init_done = 1'b0;
+    reg [1:0] init_state = 0; // 0: idle, 1: writing, 2: next address
+    reg [15:0] init_mem_addr = 16'h0000;
+    reg [7:0] init_mem_data = 8'h0000;
+
+    wire [15:0] inst_addr;
     wire [15:0] inst;
 
-    wire [15:0] memDataAddr;
-    wire [7:0] memDataIn;
-    wire [7:0] memDataOut;
-    wire memDataWrite;
+    wire [15:0] mem_data_addr;
+    wire [7:0] mem_data_in;
+    wire [7:0] mem_data_out;
+    wire mem_data_write;
 
     Core core (
         .clock(clock),
-        .reset(reset),
-        .io_pc(instAddr),
+        .reset(~reset | ~init_done),
+        .io_pc(inst_addr),
         .io_inst(),
         .io_gpRegs_0(),
         .io_gpRegs_1(),
@@ -43,10 +53,10 @@ module Top(
         .io_gpRegs_5(),
         .io_gpRegs_6(),
         .io_gpRegs_7(),
-        .io_memDataAddr(memDataAddr),
-        .io_memDataIn(memDataIn),
-        .io_memDataOut(memDataOut),
-        .io_memDataWrite(memDataWrite),
+        .io_memDataAddr(mem_data_addr),
+        .io_memDataIn(mem_data_in),
+        .io_memDataOut(mem_data_out),
+        .io_memDataWrite(mem_data_write),
         .io_memInst(inst),
         .io_debug_halt(),
         .io_debug_step()
@@ -54,31 +64,62 @@ module Top(
 
     Memory memory (
         .clock(clock),
-        .reset(reset),
-        .data_addr(memDataAddr),
-        .data_in(memDataIn),
-        .data_out(memDataOut),
-        .data_write(memDataWrite),
-        .inst_addr(instAddr),
+        .reset(~reset),
+        .data_addr(init_done ? mem_data_addr : init_mem_addr),
+        .data_in(init_done ? mem_data_in : init_mem_data),
+        .data_out(mem_data_out),
+        .data_write(init_done ? mem_data_write : (init_state == 1)),
+        .inst_addr(inst_addr),
         .inst_out(inst)
     );
 
     Led _led (
         .clock(clock),
-        .reset(reset),
-        .mmio_addr(memDataAddr),
-        .mmio_data(memDataIn),
+        .reset(~reset | ~init_done),
+        .mmio_addr(mem_data_addr),
+        .mmio_data(mem_data_in),
         .led(led)
     );
 
     Uart uart (
         .clock(clock),
-        .reset(reset),
-        .mmio_addr(memDataAddr),
-        .mmio_data(memDataIn),
-        .mmio_update(memDataWrite),
+        .reset(~reset | ~init_done),
+        .mmio_addr(mem_data_addr),
+        .mmio_data(mem_data_in),
+        .mmio_update(mem_data_write),
         .tx(uart_tx)
     );
+
+    always @(posedge clock) begin
+        if (~reset) begin
+            init_done <= 1'b0;
+            init_state <= 0;
+            init_mem_addr <= 16'h0000;
+            init_mem_data <= 8'h00;
+        end else if (~init_done) begin
+            case (init_state)
+                0: begin
+                    if (init_mem_addr < ROM_SIZE) begin
+                        init_mem_data <= rom[init_mem_addr];
+                        init_state <= 1;
+                    end else begin
+                        init_done <= 1'b1;
+                    end
+                end
+                1: begin
+                    init_state <= 2;
+                end
+                2: begin
+                    init_mem_addr <= init_mem_addr + 1;
+                    init_state <= 0;
+                end
+            endcase
+        end
+    end
+
+    initial begin
+        $readmemh("rom.hex", rom);
+    end
 endmodule
 
 `default_nettype wire

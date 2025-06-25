@@ -5,23 +5,23 @@
     <AoCore index="0" sample_clock="clock" trig_type="0" storage_depth="1024" window_num="1" capture_amount="1024" implementation="0" trigger_pos="0" module_name="Top" force_trigger_by_falling_edge="false" capture_init_data_enabled="false">
         <SignalList>
             <Signal capture_enable="true">reset</Signal>
-            <Bus capture_enable="true" name="instAddr[15:0]">
-                <Signal>instAddr[15]</Signal>
-                <Signal>instAddr[14]</Signal>
-                <Signal>instAddr[13]</Signal>
-                <Signal>instAddr[12]</Signal>
-                <Signal>instAddr[11]</Signal>
-                <Signal>instAddr[10]</Signal>
-                <Signal>instAddr[9]</Signal>
-                <Signal>instAddr[8]</Signal>
-                <Signal>instAddr[7]</Signal>
-                <Signal>instAddr[6]</Signal>
-                <Signal>instAddr[5]</Signal>
-                <Signal>instAddr[4]</Signal>
-                <Signal>instAddr[3]</Signal>
-                <Signal>instAddr[2]</Signal>
-                <Signal>instAddr[1]</Signal>
-                <Signal>instAddr[0]</Signal>
+            <Bus capture_enable="true" name="inst_addr[15:0]">
+                <Signal>inst_addr[15]</Signal>
+                <Signal>inst_addr[14]</Signal>
+                <Signal>inst_addr[13]</Signal>
+                <Signal>inst_addr[12]</Signal>
+                <Signal>inst_addr[11]</Signal>
+                <Signal>inst_addr[10]</Signal>
+                <Signal>inst_addr[9]</Signal>
+                <Signal>inst_addr[8]</Signal>
+                <Signal>inst_addr[7]</Signal>
+                <Signal>inst_addr[6]</Signal>
+                <Signal>inst_addr[5]</Signal>
+                <Signal>inst_addr[4]</Signal>
+                <Signal>inst_addr[3]</Signal>
+                <Signal>inst_addr[2]</Signal>
+                <Signal>inst_addr[1]</Signal>
+                <Signal>inst_addr[0]</Signal>
             </Bus>
             <Bus capture_enable="true" name="inst[15:0]">
                 <Signal>inst[15]</Signal>
@@ -41,45 +41,45 @@
                 <Signal>inst[1]</Signal>
                 <Signal>inst[0]</Signal>
             </Bus>
-            <Bus capture_enable="true" name="memDataAddr[15:0]">
-                <Signal>memDataAddr[15]</Signal>
-                <Signal>memDataAddr[14]</Signal>
-                <Signal>memDataAddr[13]</Signal>
-                <Signal>memDataAddr[12]</Signal>
-                <Signal>memDataAddr[11]</Signal>
-                <Signal>memDataAddr[10]</Signal>
-                <Signal>memDataAddr[9]</Signal>
-                <Signal>memDataAddr[8]</Signal>
-                <Signal>memDataAddr[7]</Signal>
-                <Signal>memDataAddr[6]</Signal>
-                <Signal>memDataAddr[5]</Signal>
-                <Signal>memDataAddr[4]</Signal>
-                <Signal>memDataAddr[3]</Signal>
-                <Signal>memDataAddr[2]</Signal>
-                <Signal>memDataAddr[1]</Signal>
-                <Signal>memDataAddr[0]</Signal>
+            <Bus capture_enable="true" name="mem_data_addr[15:0]">
+                <Signal>mem_data_addr[15]</Signal>
+                <Signal>mem_data_addr[14]</Signal>
+                <Signal>mem_data_addr[13]</Signal>
+                <Signal>mem_data_addr[12]</Signal>
+                <Signal>mem_data_addr[11]</Signal>
+                <Signal>mem_data_addr[10]</Signal>
+                <Signal>mem_data_addr[9]</Signal>
+                <Signal>mem_data_addr[8]</Signal>
+                <Signal>mem_data_addr[7]</Signal>
+                <Signal>mem_data_addr[6]</Signal>
+                <Signal>mem_data_addr[5]</Signal>
+                <Signal>mem_data_addr[4]</Signal>
+                <Signal>mem_data_addr[3]</Signal>
+                <Signal>mem_data_addr[2]</Signal>
+                <Signal>mem_data_addr[1]</Signal>
+                <Signal>mem_data_addr[0]</Signal>
             </Bus>
-            <Bus capture_enable="true" name="memDataIn[7:0]">
-                <Signal>memDataIn[7]</Signal>
-                <Signal>memDataIn[6]</Signal>
-                <Signal>memDataIn[5]</Signal>
-                <Signal>memDataIn[4]</Signal>
-                <Signal>memDataIn[3]</Signal>
-                <Signal>memDataIn[2]</Signal>
-                <Signal>memDataIn[1]</Signal>
-                <Signal>memDataIn[0]</Signal>
+            <Bus capture_enable="true" name="mem_data_in[7:0]">
+                <Signal>mem_data_in[7]</Signal>
+                <Signal>mem_data_in[6]</Signal>
+                <Signal>mem_data_in[5]</Signal>
+                <Signal>mem_data_in[4]</Signal>
+                <Signal>mem_data_in[3]</Signal>
+                <Signal>mem_data_in[2]</Signal>
+                <Signal>mem_data_in[1]</Signal>
+                <Signal>mem_data_in[0]</Signal>
             </Bus>
-            <Bus capture_enable="true" name="memDataOut[7:0]">
-                <Signal>memDataOut[7]</Signal>
-                <Signal>memDataOut[6]</Signal>
-                <Signal>memDataOut[5]</Signal>
-                <Signal>memDataOut[4]</Signal>
-                <Signal>memDataOut[3]</Signal>
-                <Signal>memDataOut[2]</Signal>
-                <Signal>memDataOut[1]</Signal>
-                <Signal>memDataOut[0]</Signal>
+            <Bus capture_enable="true" name="mem_data_out[7:0]">
+                <Signal>mem_data_out[7]</Signal>
+                <Signal>mem_data_out[6]</Signal>
+                <Signal>mem_data_out[5]</Signal>
+                <Signal>mem_data_out[4]</Signal>
+                <Signal>mem_data_out[3]</Signal>
+                <Signal>mem_data_out[2]</Signal>
+                <Signal>mem_data_out[1]</Signal>
+                <Signal>mem_data_out[0]</Signal>
             </Bus>
-            <Signal capture_enable="true">memDataWrite</Signal>
+            <Signal capture_enable="true">mem_data_write</Signal>
             <Bus capture_enable="true" name="memory/inst_addr[15:0]">
                 <Signal>memory/inst_addr[15]</Signal>
                 <Signal>memory/inst_addr[14]</Signal>
@@ -150,28 +150,44 @@
                 <Signal>memory/dpb_addr_inst[1]</Signal>
                 <Signal>memory/dpb_addr_inst[0]</Signal>
             </Bus>
+            <Signal capture_enable="true">init_done</Signal>
+            <Bus capture_enable="true" name="init_mem_addr[15:0]">
+                <Signal>init_mem_addr[15]</Signal>
+                <Signal>init_mem_addr[14]</Signal>
+                <Signal>init_mem_addr[13]</Signal>
+                <Signal>init_mem_addr[12]</Signal>
+                <Signal>init_mem_addr[11]</Signal>
+                <Signal>init_mem_addr[10]</Signal>
+                <Signal>init_mem_addr[9]</Signal>
+                <Signal>init_mem_addr[8]</Signal>
+                <Signal>init_mem_addr[7]</Signal>
+                <Signal>init_mem_addr[6]</Signal>
+                <Signal>init_mem_addr[5]</Signal>
+                <Signal>init_mem_addr[4]</Signal>
+                <Signal>init_mem_addr[3]</Signal>
+                <Signal>init_mem_addr[2]</Signal>
+                <Signal>init_mem_addr[1]</Signal>
+                <Signal>init_mem_addr[0]</Signal>
+            </Bus>
+            <Bus capture_enable="true" name="init_mem_data[7:0]">
+                <Signal>init_mem_data[7]</Signal>
+                <Signal>init_mem_data[6]</Signal>
+                <Signal>init_mem_data[5]</Signal>
+                <Signal>init_mem_data[4]</Signal>
+                <Signal>init_mem_data[3]</Signal>
+                <Signal>init_mem_data[2]</Signal>
+                <Signal>init_mem_data[1]</Signal>
+                <Signal>init_mem_data[0]</Signal>
+            </Bus>
+            <Bus capture_enable="true" name="init_state[1:0]">
+                <Signal>init_state[1]</Signal>
+                <Signal>init_state[0]</Signal>
+            </Bus>
         </SignalList>
         <Triggers>
             <Trigger index="0">
                 <SignalList>
-                    <Bus restorename="core/io_pc[15:0]">
-                        <Signal>core/io_pc[15]</Signal>
-                        <Signal>core/io_pc[14]</Signal>
-                        <Signal>core/io_pc[13]</Signal>
-                        <Signal>core/io_pc[12]</Signal>
-                        <Signal>core/io_pc[11]</Signal>
-                        <Signal>core/io_pc[10]</Signal>
-                        <Signal>core/io_pc[9]</Signal>
-                        <Signal>core/io_pc[8]</Signal>
-                        <Signal>core/io_pc[7]</Signal>
-                        <Signal>core/io_pc[6]</Signal>
-                        <Signal>core/io_pc[5]</Signal>
-                        <Signal>core/io_pc[4]</Signal>
-                        <Signal>core/io_pc[3]</Signal>
-                        <Signal>core/io_pc[2]</Signal>
-                        <Signal>core/io_pc[1]</Signal>
-                        <Signal>core/io_pc[0]</Signal>
-                    </Bus>
+                    <Signal>reset</Signal>
                 </SignalList>
             </Trigger>
             <Trigger index="1"/>
@@ -191,7 +207,7 @@
             <Trigger index="15"/>
         </Triggers>
         <MatchUnits>
-            <MatchUnit index="0" enabled="1" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="0000000000000000" value1="0000000000000000" trigger="0"/>
+            <MatchUnit index="0" enabled="1" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="1" value1="0" trigger="0"/>
             <MatchUnit index="1" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
             <MatchUnit index="2" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
             <MatchUnit index="3" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
@@ -212,5 +228,5 @@
             <Expression>M0</Expression>
         </Expressions>
     </AoCore>
-    <GAO_ID>1001001101110111</GAO_ID>
+    <GAO_ID>0000011100110100</GAO_ID>
 </GAO_CONFIG>
