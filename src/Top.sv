@@ -32,6 +32,11 @@ module Top
     reg [15:0] init_mem_addr = 16'h0000;
     reg [7:0] init_mem_data = 8'h0000;
 
+    wire data_req;
+    wire data_done;
+    wire inst_req;
+    wire inst_done;
+
     wire [15:0] inst_addr;
     wire [15:0] inst;
 
@@ -57,9 +62,13 @@ module Top
         .io_memDataIn(mem_data_in),
         .io_memDataOut(mem_data_out),
         .io_memDataWrite(mem_data_write),
+        .io_memDataReq(data_req),
+        .io_memDataDone(data_done),
         .io_memInst(inst),
-        .io_debug_halt(),
-        .io_debug_step()
+        .io_memInstReq(inst_req),
+        .io_memInstDone(inst_done),
+        .io_debugHalt(),
+        .io_debugStep()
     );
 
     Memory memory (
@@ -68,9 +77,13 @@ module Top
         .data_addr(init_done ? mem_data_addr : init_mem_addr),
         .data_in(init_done ? mem_data_in : init_mem_data),
         .data_out(mem_data_out),
+        .data_req(data_req),
+        .data_done(data_done),
         .data_write(init_done ? mem_data_write : (init_state == 1)),
         .inst_addr(inst_addr),
-        .inst_out(inst)
+        .inst_out(inst),
+        .inst_req(inst_req),
+        .inst_done(inst_done)
     );
 
     Led _led (

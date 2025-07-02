@@ -8,9 +8,13 @@ module Memory(
     input wire [7:0] data_in,
     output wire [7:0] data_out,
     input wire data_write,
+    input wire data_req, // access request
+    output wire data_done,
 
     input wire [15:0] inst_addr,
-    output wire [15:0] inst_out
+    output wire [15:0] inst_out,
+    input wire inst_req,
+    output wire inst_done
 );
 
     wire [14:0] dpb_addr_data = data_addr[15:1];
@@ -41,22 +45,59 @@ module Memory(
         .dinb(16'h0000)
     );
 
+    reg [1:0] data_state;
+    reg [1:0] inst_state;
+
+    reg data_busy;
+    reg inst_busy;
+
     always @(posedge clock) begin
         if (reset) begin
             dpb_write_en <= 1'b0;
+            data_state <= 2'b00;
+            inst_state <= 2'b00;
         end else begin
-            dpb_write_en <= 1'b0;
-            if (data_write && data_addr < 16'h8000) begin
-                dpb_write_en <= 1'b1;
-                if (data_addr[0] == 1'b0) begin
-                    dpb_data_in <= {dpb_data_out_data[15:8], data_in};
-                end else begin
-                    dpb_data_in <= {data_in, dpb_data_out_data[7:0]};
+            case (data_state)
+                2'b00: begin // idle
+                    if (data_req) begin
+                        data_state <= 2'b01;
+                        if (data_write && data_addr < 16'h8000) begin
+                            dpb_write_en <= 1'b1;
+                            if (data_addr[0] == 1'b0) begin
+                                dpb_data_in <= {dpb_data_out_data[15:8], data_in};
+                            end else begin
+                                dpb_data_in <= {data_in, dpb_data_out_data[7:0]};
+                            end
+                        end else begin
+                            dpb_write_en <= 1'b0;
+                        end
+                    end else begin
+                        dpb_write_en <= 1'b0;
+                    end
                 end
-            end
+                2'b01: begin // wait1
+                    data_state <= 2'b10;
+                    dpb_write_en <= 1'b0;
+                end
+                2'b10: begin // done
+                    if (!data_req) data_state <= 2'b00;
+                end
+            endcase
+
+            case (inst_state)
+                2'b00: begin
+                    if (inst_req) inst_state <= 2'b01;
+                end
+                2'b01: inst_state <= 2'b10;
+                2'b10: begin
+                    if (!inst_req) inst_state <= 2'b00;
+                end
+            endcase
         end
     end
 
+    assign data_done = (data_state == 2'b10);
+    assign inst_done = (inst_state == 2'b10);
     assign data_out = (data_addr[0] == 1'b0) ? dpb_data_out_data[7:0] : dpb_data_out_data[15:8];
     assign inst_out = dpb_data_out_inst;
 
