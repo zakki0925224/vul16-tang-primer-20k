@@ -30,7 +30,8 @@ module Top
     reg init_done = 1'b0;
     reg [1:0] init_state = 0; // 0: idle, 1: writing, 2: next address
     reg [15:0] init_mem_addr = 16'h0000;
-    reg [7:0] init_mem_data = 8'h0000;
+    reg [7:0] init_mem_data = 8'h00;
+    reg init_data_req;
 
     wire data_req;
     wire data_done;
@@ -77,7 +78,7 @@ module Top
         .data_addr(init_done ? mem_data_addr : init_mem_addr),
         .data_in(init_done ? mem_data_in : init_mem_data),
         .data_out(mem_data_out),
-        .data_req(data_req),
+        .data_req(data_req | init_data_req),
         .data_done(data_done),
         .data_write(init_done ? mem_data_write : (init_state == 1)),
         .inst_addr(inst_addr),
@@ -109,24 +110,32 @@ module Top
             init_state <= 0;
             init_mem_addr <= 16'h0000;
             init_mem_data <= 8'h00;
+            init_data_req <= 1'b0;
         end else if (~init_done) begin
             case (init_state)
                 0: begin
                     if (init_mem_addr < ROM_SIZE) begin
                         init_mem_data <= rom[init_mem_addr];
+                        init_data_req <= 1'b1;
                         init_state <= 1;
                     end else begin
                         init_done <= 1'b1;
+                        init_data_req <= 1'b0;
                     end
                 end
                 1: begin
                     init_state <= 2;
                 end
                 2: begin
-                    init_mem_addr <= init_mem_addr + 1;
-                    init_state <= 0;
+                    if (data_done) begin
+                        init_data_req <= 1'b0;
+                        init_mem_addr <= init_mem_addr + 1;
+                        init_state <= 0;
+                    end
                 end
             endcase
+        end else begin
+            init_data_req <= 1'b0;
         end
     end
 

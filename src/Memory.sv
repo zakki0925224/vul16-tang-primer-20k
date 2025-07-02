@@ -45,59 +45,39 @@ module Memory(
         .dinb(16'h0000)
     );
 
-    reg [1:0] data_state;
-    reg [1:0] inst_state;
-
-    reg data_busy;
-    reg inst_busy;
+    reg data_done_reg;
+    reg inst_done_reg;
 
     always @(posedge clock) begin
         if (reset) begin
             dpb_write_en <= 1'b0;
-            data_state <= 2'b00;
-            inst_state <= 2'b00;
+            data_done_reg <= 1'b0;
+            inst_done_reg <= 1'b0;
         end else begin
-            case (data_state)
-                2'b00: begin // idle
-                    if (data_req) begin
-                        data_state <= 2'b01;
-                        if (data_write && data_addr < 16'h8000) begin
-                            dpb_write_en <= 1'b1;
-                            if (data_addr[0] == 1'b0) begin
-                                dpb_data_in <= {dpb_data_out_data[15:8], data_in};
-                            end else begin
-                                dpb_data_in <= {data_in, dpb_data_out_data[7:0]};
-                            end
-                        end else begin
-                            dpb_write_en <= 1'b0;
-                        end
+            dpb_write_en <= 1'b0;
+            data_done_reg <= 1'b0;
+            inst_done_reg <= 1'b0;
+            // data port
+            if (data_req) begin
+                if (data_write && data_addr < 16'h8000) begin
+                    dpb_write_en <= 1'b1;
+                    if (data_addr[0] == 1'b0) begin
+                        dpb_data_in <= {dpb_data_out_data[15:8], data_in};
                     end else begin
-                        dpb_write_en <= 1'b0;
+                        dpb_data_in <= {data_in, dpb_data_out_data[7:0]};
                     end
                 end
-                2'b01: begin // wait1
-                    data_state <= 2'b10;
-                    dpb_write_en <= 1'b0;
-                end
-                2'b10: begin // done
-                    if (!data_req) data_state <= 2'b00;
-                end
-            endcase
-
-            case (inst_state)
-                2'b00: begin
-                    if (inst_req) inst_state <= 2'b01;
-                end
-                2'b01: inst_state <= 2'b10;
-                2'b10: begin
-                    if (!inst_req) inst_state <= 2'b00;
-                end
-            endcase
+                data_done_reg <= 1'b1;
+            end
+            // inst port
+            if (inst_req) begin
+                inst_done_reg <= 1'b1;
+            end
         end
     end
 
-    assign data_done = (data_state == 2'b10);
-    assign inst_done = (inst_state == 2'b10);
+    assign data_done = data_done_reg;
+    assign inst_done = inst_done_reg;
     assign data_out = (data_addr[0] == 1'b0) ? dpb_data_out_data[7:0] : dpb_data_out_data[15:8];
     assign inst_out = dpb_data_out_inst;
 
