@@ -183,6 +183,42 @@
                 <Signal>init_state[1]</Signal>
                 <Signal>init_state[0]</Signal>
             </Bus>
+            <Bus capture_enable="true" name="core/cpu/io_gpRegs_1[15:0]">
+                <Signal>core/cpu/io_gpRegs_1[15]</Signal>
+                <Signal>core/cpu/io_gpRegs_1[14]</Signal>
+                <Signal>core/cpu/io_gpRegs_1[13]</Signal>
+                <Signal>core/cpu/io_gpRegs_1[12]</Signal>
+                <Signal>core/cpu/io_gpRegs_1[11]</Signal>
+                <Signal>core/cpu/io_gpRegs_1[10]</Signal>
+                <Signal>core/cpu/io_gpRegs_1[9]</Signal>
+                <Signal>core/cpu/io_gpRegs_1[8]</Signal>
+                <Signal>core/cpu/io_gpRegs_1[7]</Signal>
+                <Signal>core/cpu/io_gpRegs_1[6]</Signal>
+                <Signal>core/cpu/io_gpRegs_1[5]</Signal>
+                <Signal>core/cpu/io_gpRegs_1[4]</Signal>
+                <Signal>core/cpu/io_gpRegs_1[3]</Signal>
+                <Signal>core/cpu/io_gpRegs_1[2]</Signal>
+                <Signal>core/cpu/io_gpRegs_1[1]</Signal>
+                <Signal>core/cpu/io_gpRegs_1[0]</Signal>
+            </Bus>
+            <Bus capture_enable="true" name="core/cpu/io_gpRegs_3[15:0]">
+                <Signal>core/cpu/io_gpRegs_3[15]</Signal>
+                <Signal>core/cpu/io_gpRegs_3[14]</Signal>
+                <Signal>core/cpu/io_gpRegs_3[13]</Signal>
+                <Signal>core/cpu/io_gpRegs_3[12]</Signal>
+                <Signal>core/cpu/io_gpRegs_3[11]</Signal>
+                <Signal>core/cpu/io_gpRegs_3[10]</Signal>
+                <Signal>core/cpu/io_gpRegs_3[9]</Signal>
+                <Signal>core/cpu/io_gpRegs_3[8]</Signal>
+                <Signal>core/cpu/io_gpRegs_3[7]</Signal>
+                <Signal>core/cpu/io_gpRegs_3[6]</Signal>
+                <Signal>core/cpu/io_gpRegs_3[5]</Signal>
+                <Signal>core/cpu/io_gpRegs_3[4]</Signal>
+                <Signal>core/cpu/io_gpRegs_3[3]</Signal>
+                <Signal>core/cpu/io_gpRegs_3[2]</Signal>
+                <Signal>core/cpu/io_gpRegs_3[1]</Signal>
+                <Signal>core/cpu/io_gpRegs_3[0]</Signal>
+            </Bus>
         </SignalList>
         <Triggers>
             <Trigger index="0">
@@ -228,5 +264,5 @@
             <Expression>M0</Expression>
         </Expressions>
     </AoCore>
-    <GAO_ID>0000011100110100</GAO_ID>
+    <GAO_ID>0101001001100100</GAO_ID>
 </GAO_CONFIG>

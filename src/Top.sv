@@ -38,6 +38,9 @@ module Top
     wire inst_req;
     wire inst_done;
 
+    wire mmio_led_done;
+    wire mmio_uart_done;
+
     wire [15:0] inst_addr;
     wire [15:0] inst;
 
@@ -64,7 +67,7 @@ module Top
         .io_memDataOut(mem_data_out),
         .io_memDataWrite(mem_data_write),
         .io_memDataReq(data_req),
-        .io_memDataDone(data_done),
+        .io_memDataDone(data_done | mmio_led_done | mmio_uart_done),
         .io_memInst(inst),
         .io_memInstReq(inst_req),
         .io_memInstDone(inst_done),
@@ -92,6 +95,8 @@ module Top
         .reset(~reset | ~init_done),
         .mmio_addr(mem_data_addr),
         .mmio_data(mem_data_in),
+        .mmio_req(data_req),
+        .mmio_done(mmio_led_done),
         .led(led)
     );
 
@@ -100,7 +105,8 @@ module Top
         .reset(~reset | ~init_done),
         .mmio_addr(mem_data_addr),
         .mmio_data(mem_data_in),
-        .mmio_update(mem_data_write),
+        .mmio_req(data_req),
+        .mmio_done(mmio_uart_done),
         .tx(uart_tx)
     );
 

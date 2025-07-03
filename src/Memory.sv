@@ -66,8 +66,8 @@ module Memory(
                     end else begin
                         dpb_data_in <= {data_in, dpb_data_out_data[7:0]};
                     end
+                    data_done_reg <= 1'b1;
                 end
-                data_done_reg <= 1'b1;
             end
             // inst port
             if (inst_req) begin
