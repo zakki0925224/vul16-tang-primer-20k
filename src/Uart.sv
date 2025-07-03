@@ -1,4 +1,5 @@
 `default_nettype none
+`include "Constants.vh"
 
 module Uart
 #(
@@ -57,7 +58,7 @@ module Uart
                         tx_pin_reg <= 0;
                         tx_bit_num <= 0;
                         sent_initial_char <= 1;
-                    end else if (mmio_req && mmio_addr == 16'hf001) begin
+                    end else if (mmio_req && mmio_addr == `MMIO_ADDR_UART) begin
                         tx_state <= TX_STATE_START_BIT;
                         data_out <= mmio_data;
                         tx_cnt <= 0;

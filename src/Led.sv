@@ -1,4 +1,5 @@
 `default_nettype none
+`include "Constants.vh"
 
 module Led(
     input wire clock,
@@ -20,7 +21,7 @@ module Led(
             mmio_done_reg <= 1'b0;
         end else begin
             mmio_done_reg <= 1'b0;
-            if (mmio_req && mmio_addr == 16'hf000) begin
+            if (mmio_req && mmio_addr == `MMIO_ADDR_LED) begin
                 led_reg <= mmio_data[5:0];
                 mmio_done_reg <= 1'b1;
             end

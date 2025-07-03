@@ -1,4 +1,5 @@
 `default_nettype none
+`include "Constants.vh"
 
 module Memory(
     input wire clock,
@@ -14,7 +15,10 @@ module Memory(
     input wire [15:0] inst_addr,
     output wire [15:0] inst_out,
     input wire inst_req,
-    output wire inst_done
+    output wire inst_done,
+
+    input wire mmio_led_done,
+    input wire mmio_uart_done
 );
 
     wire [14:0] dpb_addr_data = data_addr[15:1];
@@ -59,14 +63,24 @@ module Memory(
             inst_done_reg <= 1'b0;
             // data port
             if (data_req) begin
-                if (data_write && data_addr < 16'h8000) begin
-                    dpb_write_en <= 1'b1;
-                    if (data_addr[0] == 1'b0) begin
-                        dpb_data_in <= {dpb_data_out_data[15:8], data_in};
-                    end else begin
-                        dpb_data_in <= {data_in, dpb_data_out_data[7:0]};
+                if (data_addr < 16'h8000) begin
+                    if (data_write) begin
+                        dpb_write_en <= 1'b1;
+                        if (data_addr[0] == 1'b0) begin
+                            dpb_data_in <= {dpb_data_out_data[15:8], data_in};
+                        end else begin
+                            dpb_data_in <= {data_in, dpb_data_out_data[7:0]};
+                        end
                     end
                     data_done_reg <= 1'b1;
+                end else if (data_addr == `MMIO_ADDR_LED) begin
+                    if (mmio_led_done) begin
+                        data_done_reg <= 1'b1;
+                    end
+                end else if (data_addr == `MMIO_ADDR_UART) begin
+                    if (mmio_uart_done) begin
+                        data_done_reg <= 1'b1;
+                    end
                 end
             end
             // inst port

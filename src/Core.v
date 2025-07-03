@@ -86,6 +86,9 @@ module Cpu (
 	wire [15:0] _Register_2_io_out;
 	wire [15:0] _Register_1_io_out;
 	wire [15:0] _Register_io_out;
+	reg [15:0] memDataAddrReg;
+	reg [7:0] memDataInReg;
+	reg memDataWriteReg;
 	reg memDataReq;
 	reg memInstReq;
 	reg [1:0] state;
@@ -134,42 +137,42 @@ module Cpu (
 	wire _GEN_33 = op == 6'h14;
 	wire _GEN_34 = op == 6'h15;
 	wire _GEN_35 = op == 6'h16;
-	wire [15:0] _GEN_36 = _GEN_3[rd * 16+:16];
-	wire _GEN_37 = op == 6'h17;
-	wire _GEN_38 = ((((((((((((((((_GEN_2 | _GEN_13) | _GEN_14) | _GEN_15) | _GEN_16) | _GEN_17) | _GEN_18) | _GEN_19) | _GEN_20) | _GEN_21) | _GEN_22) | _GEN_23) | _GEN_24) | _GEN_25) | _GEN_26) | _GEN_27) | _GEN_28) | _GEN_29;
-	wire _GEN_39 = (((((((((((((((((((_GEN_2 | _GEN_13) | _GEN_14) | _GEN_15) | _GEN_16) | _GEN_17) | _GEN_18) | _GEN_19) | _GEN_20) | _GEN_21) | _GEN_22) | _GEN_23) | _GEN_24) | _GEN_25) | _GEN_26) | _GEN_27) | _GEN_28) | _GEN_29) | _GEN_32) | _GEN_33) | _GEN_34;
-	wire _GEN_40 = (((_GEN_32 | _GEN_33) | _GEN_34) | _GEN_35) | _GEN_37;
-	wire _GEN_41 = _GEN_32 | _GEN_33;
-	wire _GEN_42 = op == 6'h18;
+	wire _GEN_36 = op == 6'h17;
+	wire _GEN_37 = ((((((((((((((((_GEN_2 | _GEN_13) | _GEN_14) | _GEN_15) | _GEN_16) | _GEN_17) | _GEN_18) | _GEN_19) | _GEN_20) | _GEN_21) | _GEN_22) | _GEN_23) | _GEN_24) | _GEN_25) | _GEN_26) | _GEN_27) | _GEN_28) | _GEN_29;
+	wire _GEN_38 = _GEN_35 | _GEN_36;
+	wire _GEN_39 = ((_GEN_32 | _GEN_33) | _GEN_34) | _GEN_38;
+	wire _GEN_40 = _GEN_32 | _GEN_33;
+	wire _GEN_41 = op == 6'h18;
 	wire [15:0] _gpRegs_in_T_1 = _pc_io_out + 16'h0002;
-	wire _GEN_43 = op == 6'h19;
+	wire _GEN_42 = op == 6'h19;
 	wire [15:0] _t_T_1 = _pc_io_out + 16'h0002;
-	wire _GEN_44 = (((((((((((((((((_GEN_2 | _GEN_13) | _GEN_14) | _GEN_15) | _GEN_16) | _GEN_17) | _GEN_18) | _GEN_19) | _GEN_20) | _GEN_21) | _GEN_22) | _GEN_23) | _GEN_24) | _GEN_25) | _GEN_26) | _GEN_27) | _GEN_28) | _GEN_29) | (~_GEN_40 & (_GEN_42 | _GEN_43));
-	wire _GEN_45 = op == 6'h1a;
-	wire _GEN_46 = _GEN_4 == _GEN_5;
-	wire _GEN_47 = op == 6'h1b;
-	wire _GEN_48 = op == 6'h1c;
-	wire _GEN_49 = op == 6'h1d;
-	wire _GEN_50 = op == 6'h1e;
-	wire _GEN_51 = op == 6'h1f;
-	wire [15:0] _GEN_52 = {8'h00, io_memDataOut};
-	wire [15:0] _gpRegs_in_T_5 = {8'h00, io_memDataOut};
-	wire _GEN_53 = lshState == 2'h1;
-	wire _GEN_54 = _GEN_34 & _GEN_53;
-	wire _GEN_55 = &state & io_memDataDone;
-	wire _GEN_56 = lshState == 2'h2;
-	wire _GEN_57 = _GEN_34 & _GEN_56;
+	wire _GEN_43 = (((((((((((((((((_GEN_2 | _GEN_13) | _GEN_14) | _GEN_15) | _GEN_16) | _GEN_17) | _GEN_18) | _GEN_19) | _GEN_20) | _GEN_21) | _GEN_22) | _GEN_23) | _GEN_24) | _GEN_25) | _GEN_26) | _GEN_27) | _GEN_28) | _GEN_29) | (~_GEN_39 & (_GEN_41 | _GEN_42));
+	wire _GEN_44 = op == 6'h1a;
+	wire _GEN_45 = _GEN_4 == _GEN_5;
+	wire _GEN_46 = op == 6'h1b;
+	wire _GEN_47 = op == 6'h1c;
+	wire _GEN_48 = op == 6'h1d;
+	wire _GEN_49 = op == 6'h1e;
+	wire _GEN_50 = op == 6'h1f;
+	wire [15:0] _gpRegs_in_T_3 = {{8 {io_memDataOut[7]}}, io_memDataOut};
+	wire [15:0] _GEN_51 = {8'h00, io_memDataOut};
+	wire _GEN_52 = lshState == 2'h1;
+	wire _GEN_53 = _GEN_34 & _GEN_52;
+	wire _GEN_54 = &state & io_memDataDone;
+	wire _GEN_55 = lshState == 2'h2;
+	wire _GEN_56 = _GEN_34 & _GEN_55;
 	wire [15:0] result = {io_memDataOut, dataBuf};
-	wire _GEN_58 = ~allowStep | _GEN_31;
-	wire _GEN_59 = (_GEN_32 | _GEN_33) | (~_GEN_54 & _GEN_57);
-	wire _GEN_60 = _GEN_37 & _GEN_53;
-	wire _GEN_61 = _GEN_57 | _GEN_35;
-	wire _GEN_62 = ~_GEN_55 | _GEN_41;
-	wire _GEN_63 = ((_GEN_32 | _GEN_33) | _GEN_54) | _GEN_61;
-	wire _GEN_64 = _GEN_37 & _GEN_56;
-	wire _GEN_65 = _GEN_60 | ~_GEN_64;
+	wire _GEN_57 = ~allowStep | _GEN_31;
+	wire _GEN_58 = (_GEN_32 | _GEN_33) | (~_GEN_53 & _GEN_56);
+	wire _GEN_59 = _GEN_36 & _GEN_52;
+	wire _GEN_60 = _GEN_56 | _GEN_35;
+	wire _GEN_61 = _GEN_36 & _GEN_55;
+	wire _GEN_62 = _GEN_59 | ~_GEN_61;
 	always @(posedge clock)
 		if (reset) begin
+			memDataAddrReg <= 16'h0000;
+			memDataInReg <= 8'h00;
+			memDataWriteReg <= 1'h0;
 			memDataReq <= 1'h0;
 			memInstReq <= 1'h0;
 			state <= 2'h0;
@@ -182,43 +185,76 @@ module Cpu (
 			dataBuf <= 8'h00;
 		end
 		else begin : sv2v_autoblock_1
-			reg _GEN_66;
-			_GEN_66 = _GEN_0 & io_memInstDone;
-			if (_GEN_58)
+			reg _GEN_63;
+			_GEN_63 = _GEN_0 & io_memInstDone;
+			if (_GEN_57)
 				;
-			else if (_GEN_1)
-				memDataReq <= (~_GEN_38 & _GEN_40) | memDataReq;
-			else if (_GEN_55)
-				memDataReq <= ~_GEN_41 & (_GEN_54 | (~_GEN_61 & _GEN_60));
-			if (allowStep) begin : sv2v_autoblock_2
+			else begin : sv2v_autoblock_2
+				reg [15:0] _GEN_64;
+				_GEN_64 = _GEN_3[rd * 16+:16];
+				if (_GEN_1) begin : sv2v_autoblock_3
+					reg _GEN_65;
+					_GEN_65 = (_GEN_32 | _GEN_33) | _GEN_34;
+					if (~_GEN_37) begin
+						if (_GEN_32)
+							memDataAddrReg <= _GEN_4 + imm;
+						else if (_GEN_33)
+							memDataAddrReg <= _GEN_4 + imm;
+						else if (_GEN_34)
+							memDataAddrReg <= _GEN_4 + imm;
+						else if (_GEN_35)
+							memDataAddrReg <= _GEN_4 + imm;
+						else if (_GEN_36)
+							memDataAddrReg <= (_GEN_4 + imm) + 16'h0001;
+					end
+					if (~((((((((((((((((((_GEN_2 | _GEN_13) | _GEN_14) | _GEN_15) | _GEN_16) | _GEN_17) | _GEN_18) | _GEN_19) | _GEN_20) | _GEN_21) | _GEN_22) | _GEN_23) | _GEN_24) | _GEN_25) | _GEN_26) | _GEN_27) | _GEN_28) | _GEN_29) | _GEN_65)) begin
+						if (_GEN_35)
+							memDataInReg <= _GEN_64[7:0];
+						else if (_GEN_36)
+							memDataInReg <= _GEN_64[15:8];
+					end
+					if (~_GEN_37)
+						memDataWriteReg <= ~_GEN_65 & (_GEN_38 | memDataWriteReg);
+					memDataReq <= (~_GEN_37 & _GEN_39) | memDataReq;
+				end
+				else if (_GEN_54) begin : sv2v_autoblock_4
+					reg _GEN_66;
+					_GEN_66 = ((_GEN_32 | _GEN_33) | _GEN_53) | _GEN_60;
+					memDataAddrReg <= (_GEN_40 ? 16'h0000 : (_GEN_53 ? (_GEN_4 + imm) + 16'h0001 : (_GEN_60 | ~_GEN_59 ? 16'h0000 : _GEN_4 + imm)));
+					memDataInReg <= (_GEN_66 | ~_GEN_59 ? 8'h00 : _GEN_64[7:0]);
+					memDataWriteReg <= ~_GEN_66 & _GEN_59;
+					memDataReq <= ~_GEN_40 & (_GEN_53 | (~_GEN_60 & _GEN_59));
+				end
+			end
+			if (allowStep) begin : sv2v_autoblock_5
 				reg [7:0] _GEN_67;
-				_GEN_67 = {(_GEN_55 & (_GEN_41 | ~(_GEN_54 | ~(_GEN_61 | ~_GEN_65))) ? 2'h0 : state), {2 {((_GEN_41 | _GEN_34) | _GEN_35) | _GEN_37}}, (io_memInstDone ? 2'h2 : state), 2'h1};
-				memInstReq <= _GEN | (~_GEN_66 & memInstReq);
+				_GEN_67 = {(_GEN_54 & (_GEN_40 | ~(_GEN_53 | ~(_GEN_60 | ~_GEN_62))) ? 2'h0 : state), {2 {((_GEN_40 | _GEN_34) | _GEN_35) | _GEN_36}}, (io_memInstDone ? 2'h2 : state), 2'h1};
+				memInstReq <= _GEN | (~_GEN_63 & memInstReq);
 				state <= _GEN_67[state * 2+:2];
 			end
-			if (_GEN_58)
+			if (_GEN_57)
 				;
 			else if (_GEN_1) begin
-				if (((((((((((((((((((_GEN_2 | _GEN_13) | _GEN_14) | _GEN_15) | _GEN_16) | _GEN_17) | _GEN_18) | _GEN_19) | _GEN_20) | _GEN_21) | _GEN_22) | _GEN_23) | _GEN_24) | _GEN_25) | _GEN_26) | _GEN_27) | _GEN_28) | _GEN_29) | _GEN_41) | ~(_GEN_34 | ~(_GEN_35 | ~_GEN_37)))
+				if (((((((((((((((((((_GEN_2 | _GEN_13) | _GEN_14) | _GEN_15) | _GEN_16) | _GEN_17) | _GEN_18) | _GEN_19) | _GEN_20) | _GEN_21) | _GEN_22) | _GEN_23) | _GEN_24) | _GEN_25) | _GEN_26) | _GEN_27) | _GEN_28) | _GEN_29) | _GEN_40) | ~(_GEN_34 | ~(_GEN_35 | ~_GEN_36)))
 					;
 				else
 					lshState <= 2'h1;
 			end
-			else if (_GEN_62)
+			else if (~_GEN_54 | _GEN_40)
 				;
-			else if (_GEN_54)
+			else if (_GEN_53)
 				lshState <= 2'h2;
-			else if (_GEN_57)
+			else if (_GEN_56)
 				lshState <= 2'h0;
 			else if (~_GEN_35) begin
-				if (_GEN_60)
+				if (_GEN_59)
 					lshState <= 2'h2;
-				else if (_GEN_64)
+				else if (_GEN_61)
 					lshState <= 2'h0;
 			end
-			if ((~allowStep | _GEN) | ~_GEN_66)
+			if ((~allowStep | _GEN) | ~_GEN_63)
 				;
-			else begin : sv2v_autoblock_3
+			else begin : sv2v_autoblock_6
 				reg [191:0] _GEN_68;
 				reg [5:0] dOp;
 				reg [1:0] fmt;
@@ -257,7 +293,7 @@ module Cpu (
 				rs2 <= _GEN_80[fmt * 3+:3];
 				imm <= _GEN_81[fmt * 16+:16];
 			end
-			if ((((((~allowStep | _GEN) | _GEN_0) | _GEN_1) | ~_GEN_55) | _GEN_41) | ~_GEN_54)
+			if ((((((~allowStep | _GEN) | _GEN_0) | _GEN_1) | ~_GEN_54) | _GEN_40) | ~_GEN_53)
 				;
 			else
 				dataBuf <= io_memDataOut;
@@ -265,65 +301,65 @@ module Cpu (
 	Register Register(
 		.clock(clock),
 		.reset(reset),
-		.io_in((_GEN_58 ? 16'h0000 : (_GEN_1 ? (_GEN_30 ? (_GEN_6 ? _alu_io_out : 16'h0000) : (_GEN_40 ? 16'h0000 : (_GEN_42 ? (_GEN_6 ? _gpRegs_in_T_1 : 16'h0000) : (_GEN_43 & _GEN_6 ? _t_T_1 : 16'h0000)))) : (_GEN_55 ? (_GEN_32 ? (_GEN_6 ? _GEN_52 : 16'h0000) : (_GEN_33 ? (_GEN_6 ? _gpRegs_in_T_5 : 16'h0000) : (_GEN_54 | ~(_GEN_57 & _GEN_6) ? 16'h0000 : result))) : 16'h0000)))),
+		.io_in((_GEN_57 ? 16'h0000 : (_GEN_1 ? (_GEN_30 ? (_GEN_6 ? _alu_io_out : 16'h0000) : (_GEN_39 ? 16'h0000 : (_GEN_41 ? (_GEN_6 ? _gpRegs_in_T_1 : 16'h0000) : (_GEN_42 & _GEN_6 ? _t_T_1 : 16'h0000)))) : (_GEN_54 ? (_GEN_32 ? (_GEN_6 ? _gpRegs_in_T_3 : 16'h0000) : (_GEN_33 ? (_GEN_6 ? _GEN_51 : 16'h0000) : (_GEN_53 | ~(_GEN_56 & _GEN_6) ? 16'h0000 : result))) : 16'h0000)))),
 		.io_out(_Register_io_out),
-		.io_write((allowStep & ~_GEN_31) & (_GEN_1 ? _GEN_44 & _GEN_6 : (_GEN_55 & _GEN_59) & _GEN_6))
+		.io_write((allowStep & ~_GEN_31) & (_GEN_1 ? _GEN_43 & _GEN_6 : (_GEN_54 & _GEN_58) & _GEN_6))
 	);
 	Register Register_1(
 		.clock(clock),
 		.reset(reset),
-		.io_in((_GEN_58 ? _Register_1_io_out : (_GEN_1 ? (_GEN_30 ? (_GEN_7 ? _alu_io_out : _Register_1_io_out) : (_GEN_40 ? _Register_1_io_out : (_GEN_42 ? (_GEN_7 ? _gpRegs_in_T_1 : _Register_1_io_out) : (_GEN_43 & _GEN_7 ? _t_T_1 : _Register_1_io_out)))) : (_GEN_55 ? (_GEN_32 ? (_GEN_7 ? _GEN_52 : _Register_1_io_out) : (_GEN_33 ? (_GEN_7 ? _gpRegs_in_T_5 : _Register_1_io_out) : (_GEN_54 | ~(_GEN_57 & _GEN_7) ? _Register_1_io_out : result))) : _Register_1_io_out)))),
+		.io_in((_GEN_57 ? _Register_1_io_out : (_GEN_1 ? (_GEN_30 ? (_GEN_7 ? _alu_io_out : _Register_1_io_out) : (_GEN_39 ? _Register_1_io_out : (_GEN_41 ? (_GEN_7 ? _gpRegs_in_T_1 : _Register_1_io_out) : (_GEN_42 & _GEN_7 ? _t_T_1 : _Register_1_io_out)))) : (_GEN_54 ? (_GEN_32 ? (_GEN_7 ? _gpRegs_in_T_3 : _Register_1_io_out) : (_GEN_33 ? (_GEN_7 ? _GEN_51 : _Register_1_io_out) : (_GEN_53 | ~(_GEN_56 & _GEN_7) ? _Register_1_io_out : result))) : _Register_1_io_out)))),
 		.io_out(_Register_1_io_out),
-		.io_write((allowStep & ~_GEN_31) & (_GEN_1 ? _GEN_44 & _GEN_7 : (_GEN_55 & _GEN_59) & _GEN_7))
+		.io_write((allowStep & ~_GEN_31) & (_GEN_1 ? _GEN_43 & _GEN_7 : (_GEN_54 & _GEN_58) & _GEN_7))
 	);
 	Register Register_2(
 		.clock(clock),
 		.reset(reset),
-		.io_in((_GEN_58 ? _Register_2_io_out : (_GEN_1 ? (_GEN_30 ? (_GEN_8 ? _alu_io_out : _Register_2_io_out) : (_GEN_40 ? _Register_2_io_out : (_GEN_42 ? (_GEN_8 ? _gpRegs_in_T_1 : _Register_2_io_out) : (_GEN_43 & _GEN_8 ? _t_T_1 : _Register_2_io_out)))) : (_GEN_55 ? (_GEN_32 ? (_GEN_8 ? _GEN_52 : _Register_2_io_out) : (_GEN_33 ? (_GEN_8 ? _gpRegs_in_T_5 : _Register_2_io_out) : (_GEN_54 | ~(_GEN_57 & _GEN_8) ? _Register_2_io_out : result))) : _Register_2_io_out)))),
+		.io_in((_GEN_57 ? _Register_2_io_out : (_GEN_1 ? (_GEN_30 ? (_GEN_8 ? _alu_io_out : _Register_2_io_out) : (_GEN_39 ? _Register_2_io_out : (_GEN_41 ? (_GEN_8 ? _gpRegs_in_T_1 : _Register_2_io_out) : (_GEN_42 & _GEN_8 ? _t_T_1 : _Register_2_io_out)))) : (_GEN_54 ? (_GEN_32 ? (_GEN_8 ? _gpRegs_in_T_3 : _Register_2_io_out) : (_GEN_33 ? (_GEN_8 ? _GEN_51 : _Register_2_io_out) : (_GEN_53 | ~(_GEN_56 & _GEN_8) ? _Register_2_io_out : result))) : _Register_2_io_out)))),
 		.io_out(_Register_2_io_out),
-		.io_write((allowStep & ~_GEN_31) & (_GEN_1 ? _GEN_44 & _GEN_8 : (_GEN_55 & _GEN_59) & _GEN_8))
+		.io_write((allowStep & ~_GEN_31) & (_GEN_1 ? _GEN_43 & _GEN_8 : (_GEN_54 & _GEN_58) & _GEN_8))
 	);
 	Register Register_3(
 		.clock(clock),
 		.reset(reset),
-		.io_in((_GEN_58 ? _Register_3_io_out : (_GEN_1 ? (_GEN_30 ? (_GEN_9 ? _alu_io_out : _Register_3_io_out) : (_GEN_40 ? _Register_3_io_out : (_GEN_42 ? (_GEN_9 ? _gpRegs_in_T_1 : _Register_3_io_out) : (_GEN_43 & _GEN_9 ? _t_T_1 : _Register_3_io_out)))) : (_GEN_55 ? (_GEN_32 ? (_GEN_9 ? _GEN_52 : _Register_3_io_out) : (_GEN_33 ? (_GEN_9 ? _gpRegs_in_T_5 : _Register_3_io_out) : (_GEN_54 | ~(_GEN_57 & _GEN_9) ? _Register_3_io_out : result))) : _Register_3_io_out)))),
+		.io_in((_GEN_57 ? _Register_3_io_out : (_GEN_1 ? (_GEN_30 ? (_GEN_9 ? _alu_io_out : _Register_3_io_out) : (_GEN_39 ? _Register_3_io_out : (_GEN_41 ? (_GEN_9 ? _gpRegs_in_T_1 : _Register_3_io_out) : (_GEN_42 & _GEN_9 ? _t_T_1 : _Register_3_io_out)))) : (_GEN_54 ? (_GEN_32 ? (_GEN_9 ? _gpRegs_in_T_3 : _Register_3_io_out) : (_GEN_33 ? (_GEN_9 ? _GEN_51 : _Register_3_io_out) : (_GEN_53 | ~(_GEN_56 & _GEN_9) ? _Register_3_io_out : result))) : _Register_3_io_out)))),
 		.io_out(_Register_3_io_out),
-		.io_write((allowStep & ~_GEN_31) & (_GEN_1 ? _GEN_44 & _GEN_9 : (_GEN_55 & _GEN_59) & _GEN_9))
+		.io_write((allowStep & ~_GEN_31) & (_GEN_1 ? _GEN_43 & _GEN_9 : (_GEN_54 & _GEN_58) & _GEN_9))
 	);
 	Register Register_4(
 		.clock(clock),
 		.reset(reset),
-		.io_in((_GEN_58 ? _Register_4_io_out : (_GEN_1 ? (_GEN_30 ? (_GEN_10 ? _alu_io_out : _Register_4_io_out) : (_GEN_40 ? _Register_4_io_out : (_GEN_42 ? (_GEN_10 ? _gpRegs_in_T_1 : _Register_4_io_out) : (_GEN_43 & _GEN_10 ? _t_T_1 : _Register_4_io_out)))) : (_GEN_55 ? (_GEN_32 ? (_GEN_10 ? _GEN_52 : _Register_4_io_out) : (_GEN_33 ? (_GEN_10 ? _gpRegs_in_T_5 : _Register_4_io_out) : (_GEN_54 | ~(_GEN_57 & _GEN_10) ? _Register_4_io_out : result))) : _Register_4_io_out)))),
+		.io_in((_GEN_57 ? _Register_4_io_out : (_GEN_1 ? (_GEN_30 ? (_GEN_10 ? _alu_io_out : _Register_4_io_out) : (_GEN_39 ? _Register_4_io_out : (_GEN_41 ? (_GEN_10 ? _gpRegs_in_T_1 : _Register_4_io_out) : (_GEN_42 & _GEN_10 ? _t_T_1 : _Register_4_io_out)))) : (_GEN_54 ? (_GEN_32 ? (_GEN_10 ? _gpRegs_in_T_3 : _Register_4_io_out) : (_GEN_33 ? (_GEN_10 ? _GEN_51 : _Register_4_io_out) : (_GEN_53 | ~(_GEN_56 & _GEN_10) ? _Register_4_io_out : result))) : _Register_4_io_out)))),
 		.io_out(_Register_4_io_out),
-		.io_write((allowStep & ~_GEN_31) & (_GEN_1 ? _GEN_44 & _GEN_10 : (_GEN_55 & _GEN_59) & _GEN_10))
+		.io_write((allowStep & ~_GEN_31) & (_GEN_1 ? _GEN_43 & _GEN_10 : (_GEN_54 & _GEN_58) & _GEN_10))
 	);
 	Register Register_5(
 		.clock(clock),
 		.reset(reset),
-		.io_in((_GEN_58 ? _Register_5_io_out : (_GEN_1 ? (_GEN_30 ? (_GEN_11 ? _alu_io_out : _Register_5_io_out) : (_GEN_40 ? _Register_5_io_out : (_GEN_42 ? (_GEN_11 ? _gpRegs_in_T_1 : _Register_5_io_out) : (_GEN_43 & _GEN_11 ? _t_T_1 : _Register_5_io_out)))) : (_GEN_55 ? (_GEN_32 ? (_GEN_11 ? _GEN_52 : _Register_5_io_out) : (_GEN_33 ? (_GEN_11 ? _gpRegs_in_T_5 : _Register_5_io_out) : (_GEN_54 | ~(_GEN_57 & _GEN_11) ? _Register_5_io_out : result))) : _Register_5_io_out)))),
+		.io_in((_GEN_57 ? _Register_5_io_out : (_GEN_1 ? (_GEN_30 ? (_GEN_11 ? _alu_io_out : _Register_5_io_out) : (_GEN_39 ? _Register_5_io_out : (_GEN_41 ? (_GEN_11 ? _gpRegs_in_T_1 : _Register_5_io_out) : (_GEN_42 & _GEN_11 ? _t_T_1 : _Register_5_io_out)))) : (_GEN_54 ? (_GEN_32 ? (_GEN_11 ? _gpRegs_in_T_3 : _Register_5_io_out) : (_GEN_33 ? (_GEN_11 ? _GEN_51 : _Register_5_io_out) : (_GEN_53 | ~(_GEN_56 & _GEN_11) ? _Register_5_io_out : result))) : _Register_5_io_out)))),
 		.io_out(_Register_5_io_out),
-		.io_write((allowStep & ~_GEN_31) & (_GEN_1 ? _GEN_44 & _GEN_11 : (_GEN_55 & _GEN_59) & _GEN_11))
+		.io_write((allowStep & ~_GEN_31) & (_GEN_1 ? _GEN_43 & _GEN_11 : (_GEN_54 & _GEN_58) & _GEN_11))
 	);
 	Register Register_6(
 		.clock(clock),
 		.reset(reset),
-		.io_in((_GEN_58 ? _Register_6_io_out : (_GEN_1 ? (_GEN_30 ? (_GEN_12 ? _alu_io_out : _Register_6_io_out) : (_GEN_40 ? _Register_6_io_out : (_GEN_42 ? (_GEN_12 ? _gpRegs_in_T_1 : _Register_6_io_out) : (_GEN_43 & _GEN_12 ? _t_T_1 : _Register_6_io_out)))) : (_GEN_55 ? (_GEN_32 ? (_GEN_12 ? _GEN_52 : _Register_6_io_out) : (_GEN_33 ? (_GEN_12 ? _gpRegs_in_T_5 : _Register_6_io_out) : (_GEN_54 | ~(_GEN_57 & _GEN_12) ? _Register_6_io_out : result))) : _Register_6_io_out)))),
+		.io_in((_GEN_57 ? _Register_6_io_out : (_GEN_1 ? (_GEN_30 ? (_GEN_12 ? _alu_io_out : _Register_6_io_out) : (_GEN_39 ? _Register_6_io_out : (_GEN_41 ? (_GEN_12 ? _gpRegs_in_T_1 : _Register_6_io_out) : (_GEN_42 & _GEN_12 ? _t_T_1 : _Register_6_io_out)))) : (_GEN_54 ? (_GEN_32 ? (_GEN_12 ? _gpRegs_in_T_3 : _Register_6_io_out) : (_GEN_33 ? (_GEN_12 ? _GEN_51 : _Register_6_io_out) : (_GEN_53 | ~(_GEN_56 & _GEN_12) ? _Register_6_io_out : result))) : _Register_6_io_out)))),
 		.io_out(_Register_6_io_out),
-		.io_write((allowStep & ~_GEN_31) & (_GEN_1 ? _GEN_44 & _GEN_12 : (_GEN_55 & _GEN_59) & _GEN_12))
+		.io_write((allowStep & ~_GEN_31) & (_GEN_1 ? _GEN_43 & _GEN_12 : (_GEN_54 & _GEN_58) & _GEN_12))
 	);
 	Register Register_7(
 		.clock(clock),
 		.reset(reset),
-		.io_in((_GEN_58 ? _Register_7_io_out : (_GEN_1 ? (_GEN_30 ? (&rd ? _alu_io_out : _Register_7_io_out) : (_GEN_40 ? _Register_7_io_out : (_GEN_42 ? (&rd ? _gpRegs_in_T_1 : _Register_7_io_out) : (_GEN_43 & (&rd) ? _t_T_1 : _Register_7_io_out)))) : (_GEN_55 ? (_GEN_32 ? (&rd ? _GEN_52 : _Register_7_io_out) : (_GEN_33 ? (&rd ? _gpRegs_in_T_5 : _Register_7_io_out) : (_GEN_54 | ~(_GEN_57 & (&rd)) ? _Register_7_io_out : result))) : _Register_7_io_out)))),
+		.io_in((_GEN_57 ? _Register_7_io_out : (_GEN_1 ? (_GEN_30 ? (&rd ? _alu_io_out : _Register_7_io_out) : (_GEN_39 ? _Register_7_io_out : (_GEN_41 ? (&rd ? _gpRegs_in_T_1 : _Register_7_io_out) : (_GEN_42 & (&rd) ? _t_T_1 : _Register_7_io_out)))) : (_GEN_54 ? (_GEN_32 ? (&rd ? _gpRegs_in_T_3 : _Register_7_io_out) : (_GEN_33 ? (&rd ? _GEN_51 : _Register_7_io_out) : (_GEN_53 | ~(_GEN_56 & (&rd)) ? _Register_7_io_out : result))) : _Register_7_io_out)))),
 		.io_out(_Register_7_io_out),
-		.io_write((allowStep & ~_GEN_31) & (_GEN_1 ? _GEN_44 & (&rd) : (_GEN_55 & _GEN_59) & (&rd)))
+		.io_write((allowStep & ~_GEN_31) & (_GEN_1 ? _GEN_43 & (&rd) : (_GEN_54 & _GEN_58) & (&rd)))
 	);
 	Register pc(
 		.clock(clock),
 		.reset(reset),
-		.io_in((_GEN_58 ? _pc_io_out : (_GEN_1 ? (_GEN_2 ? _pc_io_out + 16'h0002 : (_GEN_13 ? _pc_io_out + 16'h0002 : (_GEN_14 ? _pc_io_out + 16'h0002 : (_GEN_15 ? _pc_io_out + 16'h0002 : (_GEN_16 ? _pc_io_out + 16'h0002 : (_GEN_17 ? _pc_io_out + 16'h0002 : (_GEN_18 ? _pc_io_out + 16'h0002 : (_GEN_19 ? _pc_io_out + 16'h0002 : (_GEN_20 ? _pc_io_out + 16'h0002 : (_GEN_21 ? _pc_io_out + 16'h0002 : (_GEN_22 ? _pc_io_out + 16'h0002 : (_GEN_23 ? _pc_io_out + 16'h0002 : (_GEN_24 ? _pc_io_out + 16'h0002 : (_GEN_25 ? _pc_io_out + 16'h0002 : (_GEN_26 ? _pc_io_out + 16'h0002 : (_GEN_27 ? _pc_io_out + 16'h0002 : (_GEN_28 ? _pc_io_out + 16'h0002 : (_GEN_29 ? _pc_io_out + 16'h0002 : (_GEN_40 ? _pc_io_out : (_GEN_42 ? _pc_io_out + imm : (_GEN_43 ? 16'h0000 : (_GEN_45 ? (_GEN_46 ? _pc_io_out + imm : _pc_io_out + 16'h0002) : (_GEN_47 ? (_GEN_46 ? _pc_io_out + 16'h0002 : _pc_io_out + imm) : (_GEN_48 ? ($signed(_GEN_4) < $signed(_GEN_5) ? _pc_io_out + imm : _pc_io_out + 16'h0002) : (_GEN_49 ? ($signed(_GEN_4) >= $signed(_GEN_5) ? _pc_io_out + imm : _pc_io_out + 16'h0002) : (_GEN_50 ? (_GEN_4 < _GEN_5 ? _pc_io_out + imm : _pc_io_out + 16'h0002) : (_GEN_51 ? (_GEN_4 >= _GEN_5 ? _pc_io_out + imm : _pc_io_out + 16'h0002) : _pc_io_out))))))))))))))))))))))))))) : (_GEN_55 ? (_GEN_32 ? _pc_io_out + 16'h0002 : (_GEN_33 ? _pc_io_out + 16'h0002 : (_GEN_54 ? _pc_io_out : (_GEN_57 ? _pc_io_out + 16'h0002 : (_GEN_35 ? _pc_io_out + 16'h0002 : (_GEN_65 ? _pc_io_out : _pc_io_out + 16'h0002)))))) : _pc_io_out)))),
+		.io_in((_GEN_57 ? _pc_io_out : (_GEN_1 ? (_GEN_2 ? _pc_io_out + 16'h0002 : (_GEN_13 ? _pc_io_out + 16'h0002 : (_GEN_14 ? _pc_io_out + 16'h0002 : (_GEN_15 ? _pc_io_out + 16'h0002 : (_GEN_16 ? _pc_io_out + 16'h0002 : (_GEN_17 ? _pc_io_out + 16'h0002 : (_GEN_18 ? _pc_io_out + 16'h0002 : (_GEN_19 ? _pc_io_out + 16'h0002 : (_GEN_20 ? _pc_io_out + 16'h0002 : (_GEN_21 ? _pc_io_out + 16'h0002 : (_GEN_22 ? _pc_io_out + 16'h0002 : (_GEN_23 ? _pc_io_out + 16'h0002 : (_GEN_24 ? _pc_io_out + 16'h0002 : (_GEN_25 ? _pc_io_out + 16'h0002 : (_GEN_26 ? _pc_io_out + 16'h0002 : (_GEN_27 ? _pc_io_out + 16'h0002 : (_GEN_28 ? _pc_io_out + 16'h0002 : (_GEN_29 ? _pc_io_out + 16'h0002 : (_GEN_39 ? _pc_io_out : (_GEN_41 ? _pc_io_out + imm : (_GEN_42 ? 16'h0000 : (_GEN_44 ? (_GEN_45 ? _pc_io_out + imm : _pc_io_out + 16'h0002) : (_GEN_46 ? (_GEN_45 ? _pc_io_out + 16'h0002 : _pc_io_out + imm) : (_GEN_47 ? ($signed(_GEN_4) < $signed(_GEN_5) ? _pc_io_out + imm : _pc_io_out + 16'h0002) : (_GEN_48 ? ($signed(_GEN_4) >= $signed(_GEN_5) ? _pc_io_out + imm : _pc_io_out + 16'h0002) : (_GEN_49 ? (_GEN_4 < _GEN_5 ? _pc_io_out + imm : _pc_io_out + 16'h0002) : (_GEN_50 ? (_GEN_4 >= _GEN_5 ? _pc_io_out + imm : _pc_io_out + 16'h0002) : _pc_io_out))))))))))))))))))))))))))) : (_GEN_54 ? (_GEN_32 ? _pc_io_out + 16'h0002 : (_GEN_33 ? _pc_io_out + 16'h0002 : (_GEN_53 ? _pc_io_out : (_GEN_56 ? _pc_io_out + 16'h0002 : (_GEN_35 ? _pc_io_out + 16'h0002 : (_GEN_62 ? _pc_io_out : _pc_io_out + 16'h0002)))))) : _pc_io_out)))),
 		.io_out(_pc_io_out),
-		.io_write((allowStep & ~_GEN_31) & (_GEN_1 ? _GEN_38 | (~_GEN_40 & (((((((_GEN_42 | _GEN_43) | _GEN_45) | _GEN_47) | _GEN_48) | _GEN_49) | _GEN_50) | _GEN_51)) : _GEN_55 & (_GEN_41 | (~_GEN_54 & (_GEN_61 | (~_GEN_60 & _GEN_64))))))
+		.io_write((allowStep & ~_GEN_31) & (_GEN_1 ? _GEN_37 | (~_GEN_39 & (((((((_GEN_41 | _GEN_42) | _GEN_44) | _GEN_46) | _GEN_47) | _GEN_48) | _GEN_49) | _GEN_50)) : _GEN_54 & (_GEN_40 | (~_GEN_53 & (_GEN_60 | (~_GEN_59 & _GEN_61))))))
 	);
 	Alu alu(
 		.io_a(((~allowStep | _GEN_31) | ~(_GEN_1 & _GEN_30) ? 16'h0000 : _GEN_4)),
@@ -331,9 +367,9 @@ module Cpu (
 		.io_op(((((~allowStep | _GEN_31) | ~_GEN_1) | _GEN_2) | _GEN_13 ? 4'h0 : (_GEN_14 ? 4'h1 : (_GEN_15 | _GEN_16 ? 4'h2 : (_GEN_17 | _GEN_18 ? 4'h3 : (_GEN_19 | _GEN_20 ? 4'h4 : (_GEN_21 | _GEN_22 ? 4'h5 : (_GEN_23 | _GEN_24 ? 4'h6 : (_GEN_25 | _GEN_26 ? 4'h7 : (_GEN_27 | _GEN_28 ? 4'h8 : (_GEN_29 ? 4'h9 : 4'h0))))))))))),
 		.io_out(_alu_io_out)
 	);
-	assign io_memDataAddr = (_GEN_58 ? 16'h0000 : (_GEN_1 ? (_GEN_38 ? 16'h0000 : (_GEN_32 ? _GEN_4 + imm : (_GEN_33 ? _GEN_4 + imm : (_GEN_34 ? _GEN_4 + imm : (_GEN_35 ? _GEN_4 + imm : (_GEN_37 ? (_GEN_4 + imm) + 16'h0001 : 16'h0000)))))) : (_GEN_62 ? 16'h0000 : (_GEN_54 ? (_GEN_4 + imm) + 16'h0001 : (_GEN_61 | ~_GEN_60 ? 16'h0000 : _GEN_4 + imm)))));
-	assign io_memDataIn = (_GEN_58 ? 8'h00 : (_GEN_1 ? (_GEN_39 ? 8'h00 : (_GEN_35 ? _GEN_36[7:0] : (_GEN_37 ? _GEN_36[15:8] : 8'h00))) : ((~_GEN_55 | _GEN_63) | ~_GEN_60 ? 8'h00 : _GEN_36[7:0])));
-	assign io_memDataWrite = (allowStep & ~_GEN_31) & (_GEN_1 ? ~_GEN_39 & (_GEN_35 | _GEN_37) : (_GEN_55 & ~_GEN_63) & _GEN_60);
+	assign io_memDataAddr = memDataAddrReg;
+	assign io_memDataIn = memDataInReg;
+	assign io_memDataWrite = memDataWriteReg;
 	assign io_memDataReq = memDataReq;
 	assign io_memInstReq = memInstReq;
 	assign io_pc = _pc_io_out;

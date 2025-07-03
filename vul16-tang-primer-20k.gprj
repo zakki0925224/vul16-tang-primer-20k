@@ -5,6 +5,7 @@
     <Version>5</Version>
     <Device name="GW2A-18C" pn="GW2A-LV18PG256C8/I7">gw2a18c-011</Device>
     <FileList>
+        <File path="src/Constants.vh" type="file.verilog" enable="1"/>
         <File path="src/Core.v" type="file.verilog" enable="1"/>
         <File path="src/Led.sv" type="file.verilog" enable="1"/>
         <File path="src/Memory.sv" type="file.verilog" enable="1"/>

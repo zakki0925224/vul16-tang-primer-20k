@@ -67,7 +67,7 @@ module Top
         .io_memDataOut(mem_data_out),
         .io_memDataWrite(mem_data_write),
         .io_memDataReq(data_req),
-        .io_memDataDone(data_done | mmio_led_done | mmio_uart_done),
+        .io_memDataDone(data_done),
         .io_memInst(inst),
         .io_memInstReq(inst_req),
         .io_memInstDone(inst_done),
@@ -87,7 +87,9 @@ module Top
         .inst_addr(inst_addr),
         .inst_out(inst),
         .inst_req(inst_req),
-        .inst_done(inst_done)
+        .inst_done(inst_done),
+        .mmio_led_done(mmio_led_done),
+        .mmio_uart_done(mmio_uart_done)
     );
 
     Led _led (

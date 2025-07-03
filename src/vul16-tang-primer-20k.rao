@@ -80,77 +80,8 @@
                 <Signal>mem_data_out[0]</Signal>
             </Bus>
             <Signal capture_enable="true">mem_data_write</Signal>
-            <Bus capture_enable="true" name="memory/inst_addr[15:0]">
-                <Signal>memory/inst_addr[15]</Signal>
-                <Signal>memory/inst_addr[14]</Signal>
-                <Signal>memory/inst_addr[13]</Signal>
-                <Signal>memory/inst_addr[12]</Signal>
-                <Signal>memory/inst_addr[11]</Signal>
-                <Signal>memory/inst_addr[10]</Signal>
-                <Signal>memory/inst_addr[9]</Signal>
-                <Signal>memory/inst_addr[8]</Signal>
-                <Signal>memory/inst_addr[7]</Signal>
-                <Signal>memory/inst_addr[6]</Signal>
-                <Signal>memory/inst_addr[5]</Signal>
-                <Signal>memory/inst_addr[4]</Signal>
-                <Signal>memory/inst_addr[3]</Signal>
-                <Signal>memory/inst_addr[2]</Signal>
-                <Signal>memory/inst_addr[1]</Signal>
-                <Signal>memory/inst_addr[0]</Signal>
-            </Bus>
-            <Bus capture_enable="true" name="memory/inst_out[15:0]">
-                <Signal>memory/inst_out[15]</Signal>
-                <Signal>memory/inst_out[14]</Signal>
-                <Signal>memory/inst_out[13]</Signal>
-                <Signal>memory/inst_out[12]</Signal>
-                <Signal>memory/inst_out[11]</Signal>
-                <Signal>memory/inst_out[10]</Signal>
-                <Signal>memory/inst_out[9]</Signal>
-                <Signal>memory/inst_out[8]</Signal>
-                <Signal>memory/inst_out[7]</Signal>
-                <Signal>memory/inst_out[6]</Signal>
-                <Signal>memory/inst_out[5]</Signal>
-                <Signal>memory/inst_out[4]</Signal>
-                <Signal>memory/inst_out[3]</Signal>
-                <Signal>memory/inst_out[2]</Signal>
-                <Signal>memory/inst_out[1]</Signal>
-                <Signal>memory/inst_out[0]</Signal>
-            </Bus>
-            <Bus capture_enable="true" name="memory/dpb_addr_data[14:0]">
-                <Signal>memory/dpb_addr_data[14]</Signal>
-                <Signal>memory/dpb_addr_data[13]</Signal>
-                <Signal>memory/dpb_addr_data[12]</Signal>
-                <Signal>memory/dpb_addr_data[11]</Signal>
-                <Signal>memory/dpb_addr_data[10]</Signal>
-                <Signal>memory/dpb_addr_data[9]</Signal>
-                <Signal>memory/dpb_addr_data[8]</Signal>
-                <Signal>memory/dpb_addr_data[7]</Signal>
-                <Signal>memory/dpb_addr_data[6]</Signal>
-                <Signal>memory/dpb_addr_data[5]</Signal>
-                <Signal>memory/dpb_addr_data[4]</Signal>
-                <Signal>memory/dpb_addr_data[3]</Signal>
-                <Signal>memory/dpb_addr_data[2]</Signal>
-                <Signal>memory/dpb_addr_data[1]</Signal>
-                <Signal>memory/dpb_addr_data[0]</Signal>
-            </Bus>
-            <Bus capture_enable="true" name="memory/dpb_addr_inst[14:0]">
-                <Signal>memory/dpb_addr_inst[14]</Signal>
-                <Signal>memory/dpb_addr_inst[13]</Signal>
-                <Signal>memory/dpb_addr_inst[12]</Signal>
-                <Signal>memory/dpb_addr_inst[11]</Signal>
-                <Signal>memory/dpb_addr_inst[10]</Signal>
-                <Signal>memory/dpb_addr_inst[9]</Signal>
-                <Signal>memory/dpb_addr_inst[8]</Signal>
-                <Signal>memory/dpb_addr_inst[7]</Signal>
-                <Signal>memory/dpb_addr_inst[6]</Signal>
-                <Signal>memory/dpb_addr_inst[5]</Signal>
-                <Signal>memory/dpb_addr_inst[4]</Signal>
-                <Signal>memory/dpb_addr_inst[3]</Signal>
-                <Signal>memory/dpb_addr_inst[2]</Signal>
-                <Signal>memory/dpb_addr_inst[1]</Signal>
-                <Signal>memory/dpb_addr_inst[0]</Signal>
-            </Bus>
-            <Signal capture_enable="true">init_done</Signal>
+            <Signal capture_enable="true">data_req</Signal>
+            <Signal capture_enable="true">data_done</Signal>
             <Bus capture_enable="true" name="init_mem_addr[15:0]">
                 <Signal>init_mem_addr[15]</Signal>
                 <Signal>init_mem_addr[14]</Signal>
@@ -183,42 +114,53 @@
                 <Signal>init_state[1]</Signal>
                 <Signal>init_state[0]</Signal>
             </Bus>
-            <Bus capture_enable="true" name="core/cpu/io_gpRegs_1[15:0]">
-                <Signal>core/cpu/io_gpRegs_1[15]</Signal>
-                <Signal>core/cpu/io_gpRegs_1[14]</Signal>
-                <Signal>core/cpu/io_gpRegs_1[13]</Signal>
-                <Signal>core/cpu/io_gpRegs_1[12]</Signal>
-                <Signal>core/cpu/io_gpRegs_1[11]</Signal>
-                <Signal>core/cpu/io_gpRegs_1[10]</Signal>
-                <Signal>core/cpu/io_gpRegs_1[9]</Signal>
-                <Signal>core/cpu/io_gpRegs_1[8]</Signal>
-                <Signal>core/cpu/io_gpRegs_1[7]</Signal>
-                <Signal>core/cpu/io_gpRegs_1[6]</Signal>
-                <Signal>core/cpu/io_gpRegs_1[5]</Signal>
-                <Signal>core/cpu/io_gpRegs_1[4]</Signal>
-                <Signal>core/cpu/io_gpRegs_1[3]</Signal>
-                <Signal>core/cpu/io_gpRegs_1[2]</Signal>
-                <Signal>core/cpu/io_gpRegs_1[1]</Signal>
-                <Signal>core/cpu/io_gpRegs_1[0]</Signal>
+            <Bus capture_enable="true" name="_led/mmio_addr[15:0]">
+                <Signal>_led/mmio_addr[15]</Signal>
+                <Signal>_led/mmio_addr[14]</Signal>
+                <Signal>_led/mmio_addr[13]</Signal>
+                <Signal>_led/mmio_addr[12]</Signal>
+                <Signal>_led/mmio_addr[11]</Signal>
+                <Signal>_led/mmio_addr[10]</Signal>
+                <Signal>_led/mmio_addr[9]</Signal>
+                <Signal>_led/mmio_addr[8]</Signal>
+                <Signal>_led/mmio_addr[7]</Signal>
+                <Signal>_led/mmio_addr[6]</Signal>
+                <Signal>_led/mmio_addr[5]</Signal>
+                <Signal>_led/mmio_addr[4]</Signal>
+                <Signal>_led/mmio_addr[3]</Signal>
+                <Signal>_led/mmio_addr[2]</Signal>
+                <Signal>_led/mmio_addr[1]</Signal>
+                <Signal>_led/mmio_addr[0]</Signal>
             </Bus>
-            <Bus capture_enable="true" name="core/cpu/io_gpRegs_3[15:0]">
-                <Signal>core/cpu/io_gpRegs_3[15]</Signal>
-                <Signal>core/cpu/io_gpRegs_3[14]</Signal>
-                <Signal>core/cpu/io_gpRegs_3[13]</Signal>
-                <Signal>core/cpu/io_gpRegs_3[12]</Signal>
-                <Signal>core/cpu/io_gpRegs_3[11]</Signal>
-                <Signal>core/cpu/io_gpRegs_3[10]</Signal>
-                <Signal>core/cpu/io_gpRegs_3[9]</Signal>
-                <Signal>core/cpu/io_gpRegs_3[8]</Signal>
-                <Signal>core/cpu/io_gpRegs_3[7]</Signal>
-                <Signal>core/cpu/io_gpRegs_3[6]</Signal>
-                <Signal>core/cpu/io_gpRegs_3[5]</Signal>
-                <Signal>core/cpu/io_gpRegs_3[4]</Signal>
-                <Signal>core/cpu/io_gpRegs_3[3]</Signal>
-                <Signal>core/cpu/io_gpRegs_3[2]</Signal>
-                <Signal>core/cpu/io_gpRegs_3[1]</Signal>
-                <Signal>core/cpu/io_gpRegs_3[0]</Signal>
+            <Bus capture_enable="true" name="_led/mmio_data[7:0]">
+                <Signal>_led/mmio_data[7]</Signal>
+                <Signal>_led/mmio_data[6]</Signal>
+                <Signal>_led/mmio_data[5]</Signal>
+                <Signal>_led/mmio_data[4]</Signal>
+                <Signal>_led/mmio_data[3]</Signal>
+                <Signal>_led/mmio_data[2]</Signal>
+                <Signal>_led/mmio_data[1]</Signal>
+                <Signal>_led/mmio_data[0]</Signal>
             </Bus>
+            <Bus capture_enable="true" name="_led/led[5:0]">
+                <Signal>_led/led[5]</Signal>
+                <Signal>_led/led[4]</Signal>
+                <Signal>_led/led[3]</Signal>
+                <Signal>_led/led[2]</Signal>
+                <Signal>_led/led[1]</Signal>
+                <Signal>_led/led[0]</Signal>
+            </Bus>
+            <Bus capture_enable="true" name="_led/led_reg[5:0]">
+                <Signal>_led/led_reg[5]</Signal>
+                <Signal>_led/led_reg[4]</Signal>
+                <Signal>_led/led_reg[3]</Signal>
+                <Signal>_led/led_reg[2]</Signal>
+                <Signal>_led/led_reg[1]</Signal>
+                <Signal>_led/led_reg[0]</Signal>
+            </Bus>
+            <Signal capture_enable="true">_led/mmio_req</Signal>
+            <Signal capture_enable="true">_led/mmio_done</Signal>
+            <Signal capture_enable="true">_led/mmio_done_reg</Signal>
         </SignalList>
         <Triggers>
             <Trigger index="0">
@@ -264,5 +206,5 @@
             <Expression>M0</Expression>
         </Expressions>
     </AoCore>
-    <GAO_ID>0101001001100100</GAO_ID>
+    <GAO_ID>1100110000111100</GAO_ID>
 </GAO_CONFIG>
