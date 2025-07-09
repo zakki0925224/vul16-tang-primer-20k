@@ -114,53 +114,74 @@
                 <Signal>init_state[1]</Signal>
                 <Signal>init_state[0]</Signal>
             </Bus>
-            <Bus capture_enable="true" name="_led/mmio_addr[15:0]">
-                <Signal>_led/mmio_addr[15]</Signal>
-                <Signal>_led/mmio_addr[14]</Signal>
-                <Signal>_led/mmio_addr[13]</Signal>
-                <Signal>_led/mmio_addr[12]</Signal>
-                <Signal>_led/mmio_addr[11]</Signal>
-                <Signal>_led/mmio_addr[10]</Signal>
-                <Signal>_led/mmio_addr[9]</Signal>
-                <Signal>_led/mmio_addr[8]</Signal>
-                <Signal>_led/mmio_addr[7]</Signal>
-                <Signal>_led/mmio_addr[6]</Signal>
-                <Signal>_led/mmio_addr[5]</Signal>
-                <Signal>_led/mmio_addr[4]</Signal>
-                <Signal>_led/mmio_addr[3]</Signal>
-                <Signal>_led/mmio_addr[2]</Signal>
-                <Signal>_led/mmio_addr[1]</Signal>
-                <Signal>_led/mmio_addr[0]</Signal>
+            <Bus capture_enable="true" name="lcd/mmio_addr[15:0]">
+                <Signal>lcd/mmio_addr[15]</Signal>
+                <Signal>lcd/mmio_addr[14]</Signal>
+                <Signal>lcd/mmio_addr[13]</Signal>
+                <Signal>lcd/mmio_addr[12]</Signal>
+                <Signal>lcd/mmio_addr[11]</Signal>
+                <Signal>lcd/mmio_addr[10]</Signal>
+                <Signal>lcd/mmio_addr[9]</Signal>
+                <Signal>lcd/mmio_addr[8]</Signal>
+                <Signal>lcd/mmio_addr[7]</Signal>
+                <Signal>lcd/mmio_addr[6]</Signal>
+                <Signal>lcd/mmio_addr[5]</Signal>
+                <Signal>lcd/mmio_addr[4]</Signal>
+                <Signal>lcd/mmio_addr[3]</Signal>
+                <Signal>lcd/mmio_addr[2]</Signal>
+                <Signal>lcd/mmio_addr[1]</Signal>
+                <Signal>lcd/mmio_addr[0]</Signal>
             </Bus>
-            <Bus capture_enable="true" name="_led/mmio_data[7:0]">
-                <Signal>_led/mmio_data[7]</Signal>
-                <Signal>_led/mmio_data[6]</Signal>
-                <Signal>_led/mmio_data[5]</Signal>
-                <Signal>_led/mmio_data[4]</Signal>
-                <Signal>_led/mmio_data[3]</Signal>
-                <Signal>_led/mmio_data[2]</Signal>
-                <Signal>_led/mmio_data[1]</Signal>
-                <Signal>_led/mmio_data[0]</Signal>
+            <Bus capture_enable="true" name="lcd/mmio_data[7:0]">
+                <Signal>lcd/mmio_data[7]</Signal>
+                <Signal>lcd/mmio_data[6]</Signal>
+                <Signal>lcd/mmio_data[5]</Signal>
+                <Signal>lcd/mmio_data[4]</Signal>
+                <Signal>lcd/mmio_data[3]</Signal>
+                <Signal>lcd/mmio_data[2]</Signal>
+                <Signal>lcd/mmio_data[1]</Signal>
+                <Signal>lcd/mmio_data[0]</Signal>
             </Bus>
-            <Bus capture_enable="true" name="_led/led[5:0]">
-                <Signal>_led/led[5]</Signal>
-                <Signal>_led/led[4]</Signal>
-                <Signal>_led/led[3]</Signal>
-                <Signal>_led/led[2]</Signal>
-                <Signal>_led/led[1]</Signal>
-                <Signal>_led/led[0]</Signal>
+            <Bus capture_enable="true" name="lcd/r[4:0]">
+                <Signal>lcd/r[4]</Signal>
+                <Signal>lcd/r[3]</Signal>
+                <Signal>lcd/r[2]</Signal>
+                <Signal>lcd/r[1]</Signal>
+                <Signal>lcd/r[0]</Signal>
             </Bus>
-            <Bus capture_enable="true" name="_led/led_reg[5:0]">
-                <Signal>_led/led_reg[5]</Signal>
-                <Signal>_led/led_reg[4]</Signal>
-                <Signal>_led/led_reg[3]</Signal>
-                <Signal>_led/led_reg[2]</Signal>
-                <Signal>_led/led_reg[1]</Signal>
-                <Signal>_led/led_reg[0]</Signal>
+            <Bus capture_enable="true" name="lcd/g[5:0]">
+                <Signal>lcd/g[5]</Signal>
+                <Signal>lcd/g[4]</Signal>
+                <Signal>lcd/g[3]</Signal>
+                <Signal>lcd/g[2]</Signal>
+                <Signal>lcd/g[1]</Signal>
+                <Signal>lcd/g[0]</Signal>
             </Bus>
-            <Signal capture_enable="true">_led/mmio_req</Signal>
-            <Signal capture_enable="true">_led/mmio_done</Signal>
-            <Signal capture_enable="true">_led/mmio_done_reg</Signal>
+            <Bus capture_enable="true" name="lcd/b[4:0]">
+                <Signal>lcd/b[4]</Signal>
+                <Signal>lcd/b[3]</Signal>
+                <Signal>lcd/b[2]</Signal>
+                <Signal>lcd/b[1]</Signal>
+                <Signal>lcd/b[0]</Signal>
+            </Bus>
+            <Signal capture_enable="true">lcd/mmio_req</Signal>
+            <Signal capture_enable="true">lcd/mmio_done</Signal>
+            <Signal capture_enable="true">lcd/dclk</Signal>
+            <Signal capture_enable="true">lcd/de</Signal>
+            <Signal capture_enable="true">lcd/hs</Signal>
+            <Signal capture_enable="true">lcd/vs</Signal>
+            <Bus capture_enable="true" name="lcd/lcd_text_vram_pos[9:0]">
+                <Signal>lcd/lcd_text_vram_pos[9]</Signal>
+                <Signal>lcd/lcd_text_vram_pos[8]</Signal>
+                <Signal>lcd/lcd_text_vram_pos[7]</Signal>
+                <Signal>lcd/lcd_text_vram_pos[6]</Signal>
+                <Signal>lcd/lcd_text_vram_pos[5]</Signal>
+                <Signal>lcd/lcd_text_vram_pos[4]</Signal>
+                <Signal>lcd/lcd_text_vram_pos[3]</Signal>
+                <Signal>lcd/lcd_text_vram_pos[2]</Signal>
+                <Signal>lcd/lcd_text_vram_pos[1]</Signal>
+                <Signal>lcd/lcd_text_vram_pos[0]</Signal>
+            </Bus>
         </SignalList>
         <Triggers>
             <Trigger index="0">
@@ -206,5 +227,5 @@
             <Expression>M0</Expression>
         </Expressions>
     </AoCore>
-    <GAO_ID>1100110000111100</GAO_ID>
+    <GAO_ID>0100001110100111</GAO_ID>
 </GAO_CONFIG>

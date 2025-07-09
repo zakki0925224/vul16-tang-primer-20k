@@ -40,6 +40,7 @@ module Top
 
     wire mmio_led_done;
     wire mmio_uart_done;
+    wire mmio_lcd_done;
 
     wire [15:0] inst_addr;
     wire [15:0] inst;
@@ -89,7 +90,8 @@ module Top
         .inst_req(inst_req),
         .inst_done(inst_done),
         .mmio_led_done(mmio_led_done),
-        .mmio_uart_done(mmio_uart_done)
+        .mmio_uart_done(mmio_uart_done),
+        .mmio_lcd_done(mmio_lcd_done)
     );
 
     Led _led (
@@ -110,6 +112,22 @@ module Top
         .mmio_req(data_req),
         .mmio_done(mmio_uart_done),
         .tx(uart_tx)
+    );
+
+    RgbLcd lcd (
+        .clock(clock),
+        .reset(~reset | ~init_done),
+        .mmio_addr(mem_data_addr),
+        .mmio_data(mem_data_in),
+        .mmio_req(data_req),
+        .mmio_done(mmio_lcd_done),
+        .dclk(lcd_dclk),
+        .de(lcd_de),
+        .hs(lcd_hs),
+        .vs(lcd_vs),
+        .r(lcd_r),
+        .g(lcd_g),
+        .b(lcd_b)
     );
 
     always @(posedge clock) begin

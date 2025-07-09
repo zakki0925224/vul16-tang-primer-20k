@@ -18,7 +18,8 @@ module Memory(
     output wire inst_done,
 
     input wire mmio_led_done,
-    input wire mmio_uart_done
+    input wire mmio_uart_done,
+    input wire mmio_lcd_done
 );
 
     wire [14:0] dpb_addr_data = data_addr[15:1];
@@ -79,6 +80,10 @@ module Memory(
                     end
                 end else if (data_addr == `MMIO_ADDR_UART) begin
                     if (mmio_uart_done) begin
+                        data_done_reg <= 1'b1;
+                    end
+                end else if (data_addr >= `MMIO_ADDR_LCD) begin
+                    if (mmio_lcd_done) begin
                         data_done_reg <= 1'b1;
                     end
                 end

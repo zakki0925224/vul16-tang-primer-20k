@@ -1,2 +1,4 @@
 `define MMIO_ADDR_LED  16'hf000
 `define MMIO_ADDR_UART 16'hf001
+`define MMIO_ADDR_BTN  16'hf002
+`define MMIO_ADDR_LCD  16'hf003
