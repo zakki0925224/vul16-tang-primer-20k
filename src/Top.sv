@@ -50,6 +50,16 @@ module Top
     wire [7:0] mem_data_out;
     wire mem_data_write;
 
+    // debounced / synchronized button outputs (active-high when pressed)
+    reg [7:0] btn1_sh;
+    reg [7:0] btn2_sh;
+    reg [7:0] btn3_sh;
+    reg [7:0] btn4_sh;
+    reg btn1_db;
+    reg btn2_db;
+    reg btn3_db;
+    reg btn4_db;
+
     Core core (
         .clock(clock),
         .reset(~reset | ~init_done),
@@ -91,7 +101,9 @@ module Top
         .inst_done(inst_done),
         .mmio_led_done(mmio_led_done),
         .mmio_uart_done(mmio_uart_done),
-        .mmio_lcd_done(mmio_lcd_done)
+        .mmio_lcd_done(mmio_lcd_done),
+        // debounced button inputs (bit0 = btn_s1, bit1 = btn_s2 ...)
+        .tmp_mmio_btn({4'b0000, btn4_db, btn3_db, btn2_db, btn1_db})
     );
 
     Led _led (
@@ -162,6 +174,39 @@ module Top
             endcase
         end else begin
             init_data_req <= 1'b0;
+        end
+    end
+
+    // button synchronizer + debounce (8-sample shift register)
+    always @(posedge clock) begin
+        if (~reset) begin
+            btn1_sh <= 8'h00;
+            btn2_sh <= 8'h00;
+            btn3_sh <= 8'h00;
+            btn4_sh <= 8'h00;
+            btn1_db <= 1'b0;
+            btn2_db <= 1'b0;
+            btn3_db <= 1'b0;
+            btn4_db <= 1'b0;
+        end else begin
+            // buttons are likely active-low on the board: invert when sampling
+            btn1_sh <= {btn1_sh[6:0], ~btn_s1};
+            btn2_sh <= {btn2_sh[6:0], ~btn_s2};
+            btn3_sh <= {btn3_sh[6:0], ~btn_s3};
+            btn4_sh <= {btn4_sh[6:0], ~btn_s4};
+
+            // update debounced outputs only when stable
+            if (btn1_sh == 8'hff) btn1_db <= 1'b1;
+            else if (btn1_sh == 8'h00) btn1_db <= 1'b0;
+
+            if (btn2_sh == 8'hff) btn2_db <= 1'b1;
+            else if (btn2_sh == 8'h00) btn2_db <= 1'b0;
+
+            if (btn3_sh == 8'hff) btn3_db <= 1'b1;
+            else if (btn3_sh == 8'h00) btn3_db <= 1'b0;
+
+            if (btn4_sh == 8'hff) btn4_db <= 1'b1;
+            else if (btn4_sh == 8'h00) btn4_db <= 1'b0;
         end
     end
 

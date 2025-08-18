@@ -19,7 +19,9 @@ module Memory(
 
     input wire mmio_led_done,
     input wire mmio_uart_done,
-    input wire mmio_lcd_done
+    input wire mmio_lcd_done,
+
+    input wire [7:0] tmp_mmio_btn
 );
 
     wire [14:0] dpb_addr_data = data_addr[15:1];
@@ -74,10 +76,10 @@ module Memory(
                         end
                     end
                     data_done_reg <= 1'b1;
+                end else if (data_addr == `MMIO_ADDR_BTN) begin
+                    data_done_reg <= 1'b1;
                 end else if (data_addr == `MMIO_ADDR_LED) begin
-                    if (mmio_led_done) begin
-                        data_done_reg <= 1'b1;
-                    end
+                    if (mmio_led_done) data_done_reg <= 1'b1;
                 end else if (data_addr == `MMIO_ADDR_UART) begin
                     if (mmio_uart_done) begin
                         data_done_reg <= 1'b1;
@@ -88,16 +90,13 @@ module Memory(
                     end
                 end
             end
-            // inst port
-            if (inst_req) begin
-                inst_done_reg <= 1'b1;
-            end
+            if (inst_req) inst_done_reg <= 1'b1;
         end
     end
 
     assign data_done = data_done_reg;
     assign inst_done = inst_done_reg;
-    assign data_out = (data_addr[0] == 1'b0) ? dpb_data_out_data[7:0] : dpb_data_out_data[15:8];
+    assign data_out = (data_addr >= 16'h8000) ? ((data_addr == `MMIO_ADDR_BTN) ? tmp_mmio_btn : 8'h00) : ((data_addr[0] == 1'b0) ? dpb_data_out_data[7:0] : dpb_data_out_data[15:8]);
     assign inst_out = dpb_data_out_inst;
 
 endmodule
