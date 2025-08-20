@@ -2,7 +2,7 @@
 
 module Top
 #(
-    parameter ROM_SIZE = 16'hf000 // 61KB
+    parameter ROM_SIZE = 16384
 )
 (
     input wire clock,
