@@ -1,6 +1,12 @@
 ; https://github.com/zakki0925224/vul16-asm - vul16 assembler
 ; Breakout Game
 
+; Button 2 - Move paddle right
+; Button 3 - Move paddle left
+
+; Game state at 0xe000
+; +0: paddle_x (i16)
+
 ; MMIO_BTN = 0xf002
 ; MMIO_LCD = 0xf004~
 
@@ -119,6 +125,16 @@
     slli r4, r4, 8
 .end_macro
 
+.macro SET_MMIO_LCD_BGFG_REV_TO_R4()
+    addi r4, r0, 0xf ; BG: 0xf (white) | FG: 0x0 (black)
+    slli r4, r4, 12
+.end_macro
+
+.macro SET_GAME_STATE_ADDR_TO_R5()
+    addi r5, r0, 0xe ; 0x000e
+    slli r5, r5, 12  ; 0xe000
+.end_macro
+
 .macro WRITE_BLOCK()
     ; r2 = MMIO_LCD_ADDR
     SET_MMIO_LCD_BGFG_TO_R4()
@@ -148,10 +164,11 @@
 
 .macro RESET_TITLE()
     SET_MMIO_LCD_ADDR_TO_R2()
-    addi r4, r0, 3 ; 0x03
-    slli r4, r4, 4 ; 0x30
-    addi r4, r4, 4 ; 0x34
-    add r2, r2, r4 ; offset + 0x34
+    ; offset + 50
+    addi r4, r0, 0x3
+    slli r4, r4, 4
+    addi r4, r4, 0x2
+    add r2, r2, r4
 
     SET_MMIO_LCD_BGFG_TO_R4()
 
@@ -210,112 +227,156 @@
     addi r2, r2, 2
 .end_macro
 
-.macro RESET_BLOCKS()
+.macro RESET_GAME()
     SET_MMIO_LCD_ADDR_TO_R2()
     ; offset + 240
     addi r4, r0, 0xf
     slli r4, r4, 4
     add r2, r2, r4
 
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
+    ; write blocks 15*6
+    ; set counter to r5
+    addi r5, r0, 5   ; 0x05
+    slli r5, r5, 4   ; 0x50
+    addi r5, r5, 0xa ; 0x5a
 
+    ; loop
     WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
+    ; decrement counter
+    addi r5, r5, -1
 
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
+    ; if r5 == 0, pc += 4
+    beq r5, r0, 4
 
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
+    ; jump to loop top (offset -48)
+    jmp r0, -48
 
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
+    ; write paddle
+    ; offset + 774
+    addi r4, r0, 0x3
+    slli r4, r4, 8
+    addi r4, r4, 0x6
+    add r2, r2, r4
 
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
-    WRITE_BLOCK()
+    SET_MMIO_LCD_ASCII_EQ_TO_R3()
+    SET_MMIO_LCD_BGFG_TO_R4()
+    or r3, r3, r4
+    sw r3, r2, 0 ; set
+    addi r2, r2, 2
+    sw r3, r2, 0 ; set
+    addi r2, r2, 2
+    sw r3, r2, 0 ; set
+    addi r2, r2, 2
+    sw r3, r2, 0 ; set
+    addi r2, r2, 2
+    sw r3, r2, 0 ; set
+
+    ; offset - 124
+    addi r4, r0, 0xf
+    slli r4, r4, 4
+    addi r4, r4, 0xf
+    slli r4, r4, 4
+    addi r4, r4, 0x8
+    slli r4, r4, 4
+    addi r4, r4, 0x4
+    add r2, r2, r4
+
+    SET_MMIO_LCD_ASCII_o_TO_R3()
+    SET_MMIO_LCD_BGFG_TO_R4()
+    or r3, r3, r4
+    sw r3, r2, 0 ; set
+.end_macro
+
+.macro MOVE_PADDLE()
+    ; read game state paddle_x to r6
+    SET_GAME_STATE_ADDR_TO_R5()
+    lw r6, r5, 0
+
+    ; read button state to r7
+    SET_MMIO_BTN_ADDR_TO_R2()
+    lb r7, r2, 0
+
+    ; button 2 (bit 1) - move right
+    andi r4, r7, 0b10
+    addi r3, r0, 0b10
+
+    bne r4, r3, 4
+    addi r6, r6, -1
+
+    ; button 3 (bit 2) - move left
+    andi r4, r7, 0b100
+    addi r3, r0, 0b100
+
+    bne r4, r3, 4
+    addi r6, r6, 1
+
+    ; update state
+    sw r6, r5, 0
+
+    ; clear paddle
+    SET_MMIO_LCD_ADDR_TO_R2()
+    ; offset + 60 chars * 14 lines * 2 bytes = 1680 (0x690)
+    addi r1, r0, 6 ; 0x0006
+    slli r1, r1, 4 ; 0x0060
+    addi r1, r1, 9 ; 0x0069
+    slli r1, r1, 4 ; 0x0690
+    or r2, r2, r1  ; 0xf694
+
+    SET_MMIO_LCD_ASCII_SPACE_TO_R3()
+    SET_MMIO_LCD_BGFG_TO_R4()
+    or r3, r3, r4
+
+    ; set decrement counter 60
+    addi r5, r0, 3   ; 0x0003
+    slli r5, r5, 4   ; 0x0030
+    addi r5, r5, 0xc ; 0x003c
+
+    sw r3, r2, 0 ; set
+
+    ; decrement counter
+    addi r5, r5, -1
+    ; increment offset
+    addi r2, r2, 2
+    ; if r5 == 0, pc += 4
+    beq r5, r0, 4
+    jmp r0, -8
+
+    ; write paddle
+    ; offset - 33 chars * 2 = 66 (0x42)
+    addi r5, r0, 4 ; 0x0004
+    slli r5, r5, 4 ; 0x0040
+    addi r5, r5, 2 ; 0x0042
+    sub r2, r2, r5
+    ; offset - r6 * 2 chars
+    slli r6, r6, 1
+    sub r2, r2, r6
+
+    SET_MMIO_LCD_ASCII_EQ_TO_R3()
+    or r3, r3, r4
+
+    sw r3, r2, 0 ; set
+    addi r2, r2, 2
+    sw r3, r2, 0 ; set
+    addi r2, r2, 2
+    sw r3, r2, 0 ; set
+    addi r2, r2, 2
+    sw r3, r2, 0 ; set
+    addi r2, r2, 2
+    sw r3, r2, 0 ; set
 .end_macro
 
 j #main
 
 main:
     RESET_TITLE()
-    RESET_BLOCKS()
+    RESET_GAME()
+    j #loop
+
+
+loop:
+    MOVE_PADDLE()
+    ; jump to 0x108
+    addi r1, r0, 0x1
+    slli r1, r1, 8
+    addi r1, r1, 0x8
+    jmpr r0, r1, 0

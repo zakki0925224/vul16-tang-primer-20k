@@ -2,3 +2,4 @@ impl/
 *.gprj.user
 *.mod
 *.bin
+*.hex
