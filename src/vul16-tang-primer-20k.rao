@@ -5,188 +5,128 @@
     <AoCore index="0" sample_clock="clock" trig_type="0" storage_depth="1024" window_num="1" capture_amount="1024" implementation="0" trigger_pos="0" module_name="Top" force_trigger_by_falling_edge="false" capture_init_data_enabled="false">
         <SignalList>
             <Signal capture_enable="true">reset</Signal>
-            <Bus capture_enable="true" name="inst_addr[15:0]">
-                <Signal>inst_addr[15]</Signal>
-                <Signal>inst_addr[14]</Signal>
-                <Signal>inst_addr[13]</Signal>
-                <Signal>inst_addr[12]</Signal>
-                <Signal>inst_addr[11]</Signal>
-                <Signal>inst_addr[10]</Signal>
-                <Signal>inst_addr[9]</Signal>
-                <Signal>inst_addr[8]</Signal>
-                <Signal>inst_addr[7]</Signal>
-                <Signal>inst_addr[6]</Signal>
-                <Signal>inst_addr[5]</Signal>
-                <Signal>inst_addr[4]</Signal>
-                <Signal>inst_addr[3]</Signal>
-                <Signal>inst_addr[2]</Signal>
-                <Signal>inst_addr[1]</Signal>
-                <Signal>inst_addr[0]</Signal>
+            <Bus capture_enable="true" name="core/io_pc[15:0]">
+                <Signal>core/io_pc[15]</Signal>
+                <Signal>core/io_pc[14]</Signal>
+                <Signal>core/io_pc[13]</Signal>
+                <Signal>core/io_pc[12]</Signal>
+                <Signal>core/io_pc[11]</Signal>
+                <Signal>core/io_pc[10]</Signal>
+                <Signal>core/io_pc[9]</Signal>
+                <Signal>core/io_pc[8]</Signal>
+                <Signal>core/io_pc[7]</Signal>
+                <Signal>core/io_pc[6]</Signal>
+                <Signal>core/io_pc[5]</Signal>
+                <Signal>core/io_pc[4]</Signal>
+                <Signal>core/io_pc[3]</Signal>
+                <Signal>core/io_pc[2]</Signal>
+                <Signal>core/io_pc[1]</Signal>
+                <Signal>core/io_pc[0]</Signal>
             </Bus>
-            <Bus capture_enable="true" name="inst[15:0]">
-                <Signal>inst[15]</Signal>
-                <Signal>inst[14]</Signal>
-                <Signal>inst[13]</Signal>
-                <Signal>inst[12]</Signal>
-                <Signal>inst[11]</Signal>
-                <Signal>inst[10]</Signal>
-                <Signal>inst[9]</Signal>
-                <Signal>inst[8]</Signal>
-                <Signal>inst[7]</Signal>
-                <Signal>inst[6]</Signal>
-                <Signal>inst[5]</Signal>
-                <Signal>inst[4]</Signal>
-                <Signal>inst[3]</Signal>
-                <Signal>inst[2]</Signal>
-                <Signal>inst[1]</Signal>
-                <Signal>inst[0]</Signal>
+            <Bus capture_enable="true" name="core/io_inst[15:0]">
+                <Signal>core/io_inst[15]</Signal>
+                <Signal>core/io_inst[14]</Signal>
+                <Signal>core/io_inst[13]</Signal>
+                <Signal>core/io_inst[12]</Signal>
+                <Signal>core/io_inst[11]</Signal>
+                <Signal>core/io_inst[10]</Signal>
+                <Signal>core/io_inst[9]</Signal>
+                <Signal>core/io_inst[8]</Signal>
+                <Signal>core/io_inst[7]</Signal>
+                <Signal>core/io_inst[6]</Signal>
+                <Signal>core/io_inst[5]</Signal>
+                <Signal>core/io_inst[4]</Signal>
+                <Signal>core/io_inst[3]</Signal>
+                <Signal>core/io_inst[2]</Signal>
+                <Signal>core/io_inst[1]</Signal>
+                <Signal>core/io_inst[0]</Signal>
             </Bus>
-            <Bus capture_enable="true" name="mem_data_addr[15:0]">
-                <Signal>mem_data_addr[15]</Signal>
-                <Signal>mem_data_addr[14]</Signal>
-                <Signal>mem_data_addr[13]</Signal>
-                <Signal>mem_data_addr[12]</Signal>
-                <Signal>mem_data_addr[11]</Signal>
-                <Signal>mem_data_addr[10]</Signal>
-                <Signal>mem_data_addr[9]</Signal>
-                <Signal>mem_data_addr[8]</Signal>
-                <Signal>mem_data_addr[7]</Signal>
-                <Signal>mem_data_addr[6]</Signal>
-                <Signal>mem_data_addr[5]</Signal>
-                <Signal>mem_data_addr[4]</Signal>
-                <Signal>mem_data_addr[3]</Signal>
-                <Signal>mem_data_addr[2]</Signal>
-                <Signal>mem_data_addr[1]</Signal>
-                <Signal>mem_data_addr[0]</Signal>
+            <Bus capture_enable="true" name="core/cpu/rs1[2:0]">
+                <Signal>core/cpu/rs1[2]</Signal>
+                <Signal>core/cpu/rs1[1]</Signal>
+                <Signal>core/cpu/rs1[0]</Signal>
             </Bus>
-            <Bus capture_enable="true" name="mem_data_in[7:0]">
-                <Signal>mem_data_in[7]</Signal>
-                <Signal>mem_data_in[6]</Signal>
-                <Signal>mem_data_in[5]</Signal>
-                <Signal>mem_data_in[4]</Signal>
-                <Signal>mem_data_in[3]</Signal>
-                <Signal>mem_data_in[2]</Signal>
-                <Signal>mem_data_in[1]</Signal>
-                <Signal>mem_data_in[0]</Signal>
+            <Bus capture_enable="true" name="core/cpu/rs2[2:0]">
+                <Signal>core/cpu/rs2[2]</Signal>
+                <Signal>core/cpu/rs2[1]</Signal>
+                <Signal>core/cpu/rs2[0]</Signal>
             </Bus>
-            <Bus capture_enable="true" name="mem_data_out[7:0]">
-                <Signal>mem_data_out[7]</Signal>
-                <Signal>mem_data_out[6]</Signal>
-                <Signal>mem_data_out[5]</Signal>
-                <Signal>mem_data_out[4]</Signal>
-                <Signal>mem_data_out[3]</Signal>
-                <Signal>mem_data_out[2]</Signal>
-                <Signal>mem_data_out[1]</Signal>
-                <Signal>mem_data_out[0]</Signal>
+            <Bus capture_enable="true" name="core/cpu/rd[2:0]">
+                <Signal>core/cpu/rd[2]</Signal>
+                <Signal>core/cpu/rd[1]</Signal>
+                <Signal>core/cpu/rd[0]</Signal>
             </Bus>
-            <Signal capture_enable="true">mem_data_write</Signal>
-            <Signal capture_enable="true">data_req</Signal>
-            <Signal capture_enable="true">data_done</Signal>
-            <Bus capture_enable="true" name="init_mem_addr[15:0]">
-                <Signal>init_mem_addr[15]</Signal>
-                <Signal>init_mem_addr[14]</Signal>
-                <Signal>init_mem_addr[13]</Signal>
-                <Signal>init_mem_addr[12]</Signal>
-                <Signal>init_mem_addr[11]</Signal>
-                <Signal>init_mem_addr[10]</Signal>
-                <Signal>init_mem_addr[9]</Signal>
-                <Signal>init_mem_addr[8]</Signal>
-                <Signal>init_mem_addr[7]</Signal>
-                <Signal>init_mem_addr[6]</Signal>
-                <Signal>init_mem_addr[5]</Signal>
-                <Signal>init_mem_addr[4]</Signal>
-                <Signal>init_mem_addr[3]</Signal>
-                <Signal>init_mem_addr[2]</Signal>
-                <Signal>init_mem_addr[1]</Signal>
-                <Signal>init_mem_addr[0]</Signal>
+            <Bus capture_enable="true" name="core/cpu/alu/io_a[15:0]">
+                <Signal>core/cpu/alu/io_a[15]</Signal>
+                <Signal>core/cpu/alu/io_a[14]</Signal>
+                <Signal>core/cpu/alu/io_a[13]</Signal>
+                <Signal>core/cpu/alu/io_a[12]</Signal>
+                <Signal>core/cpu/alu/io_a[11]</Signal>
+                <Signal>core/cpu/alu/io_a[10]</Signal>
+                <Signal>core/cpu/alu/io_a[9]</Signal>
+                <Signal>core/cpu/alu/io_a[8]</Signal>
+                <Signal>core/cpu/alu/io_a[7]</Signal>
+                <Signal>core/cpu/alu/io_a[6]</Signal>
+                <Signal>core/cpu/alu/io_a[5]</Signal>
+                <Signal>core/cpu/alu/io_a[4]</Signal>
+                <Signal>core/cpu/alu/io_a[3]</Signal>
+                <Signal>core/cpu/alu/io_a[2]</Signal>
+                <Signal>core/cpu/alu/io_a[1]</Signal>
+                <Signal>core/cpu/alu/io_a[0]</Signal>
             </Bus>
-            <Bus capture_enable="true" name="init_mem_data[7:0]">
-                <Signal>init_mem_data[7]</Signal>
-                <Signal>init_mem_data[6]</Signal>
-                <Signal>init_mem_data[5]</Signal>
-                <Signal>init_mem_data[4]</Signal>
-                <Signal>init_mem_data[3]</Signal>
-                <Signal>init_mem_data[2]</Signal>
-                <Signal>init_mem_data[1]</Signal>
-                <Signal>init_mem_data[0]</Signal>
+            <Bus capture_enable="true" name="core/cpu/alu/io_b[15:0]">
+                <Signal>core/cpu/alu/io_b[15]</Signal>
+                <Signal>core/cpu/alu/io_b[14]</Signal>
+                <Signal>core/cpu/alu/io_b[13]</Signal>
+                <Signal>core/cpu/alu/io_b[12]</Signal>
+                <Signal>core/cpu/alu/io_b[11]</Signal>
+                <Signal>core/cpu/alu/io_b[10]</Signal>
+                <Signal>core/cpu/alu/io_b[9]</Signal>
+                <Signal>core/cpu/alu/io_b[8]</Signal>
+                <Signal>core/cpu/alu/io_b[7]</Signal>
+                <Signal>core/cpu/alu/io_b[6]</Signal>
+                <Signal>core/cpu/alu/io_b[5]</Signal>
+                <Signal>core/cpu/alu/io_b[4]</Signal>
+                <Signal>core/cpu/alu/io_b[3]</Signal>
+                <Signal>core/cpu/alu/io_b[2]</Signal>
+                <Signal>core/cpu/alu/io_b[1]</Signal>
+                <Signal>core/cpu/alu/io_b[0]</Signal>
             </Bus>
-            <Bus capture_enable="true" name="init_state[1:0]">
-                <Signal>init_state[1]</Signal>
-                <Signal>init_state[0]</Signal>
+            <Bus capture_enable="true" name="core/cpu/alu/io_op[3:0]">
+                <Signal>core/cpu/alu/io_op[3]</Signal>
+                <Signal>core/cpu/alu/io_op[2]</Signal>
+                <Signal>core/cpu/alu/io_op[1]</Signal>
+                <Signal>core/cpu/alu/io_op[0]</Signal>
             </Bus>
-            <Bus capture_enable="true" name="lcd/mmio_addr[15:0]">
-                <Signal>lcd/mmio_addr[15]</Signal>
-                <Signal>lcd/mmio_addr[14]</Signal>
-                <Signal>lcd/mmio_addr[13]</Signal>
-                <Signal>lcd/mmio_addr[12]</Signal>
-                <Signal>lcd/mmio_addr[11]</Signal>
-                <Signal>lcd/mmio_addr[10]</Signal>
-                <Signal>lcd/mmio_addr[9]</Signal>
-                <Signal>lcd/mmio_addr[8]</Signal>
-                <Signal>lcd/mmio_addr[7]</Signal>
-                <Signal>lcd/mmio_addr[6]</Signal>
-                <Signal>lcd/mmio_addr[5]</Signal>
-                <Signal>lcd/mmio_addr[4]</Signal>
-                <Signal>lcd/mmio_addr[3]</Signal>
-                <Signal>lcd/mmio_addr[2]</Signal>
-                <Signal>lcd/mmio_addr[1]</Signal>
-                <Signal>lcd/mmio_addr[0]</Signal>
+            <Bus capture_enable="true" name="core/cpu/alu/io_out[15:0]">
+                <Signal>core/cpu/alu/io_out[15]</Signal>
+                <Signal>core/cpu/alu/io_out[14]</Signal>
+                <Signal>core/cpu/alu/io_out[13]</Signal>
+                <Signal>core/cpu/alu/io_out[12]</Signal>
+                <Signal>core/cpu/alu/io_out[11]</Signal>
+                <Signal>core/cpu/alu/io_out[10]</Signal>
+                <Signal>core/cpu/alu/io_out[9]</Signal>
+                <Signal>core/cpu/alu/io_out[8]</Signal>
+                <Signal>core/cpu/alu/io_out[7]</Signal>
+                <Signal>core/cpu/alu/io_out[6]</Signal>
+                <Signal>core/cpu/alu/io_out[5]</Signal>
+                <Signal>core/cpu/alu/io_out[4]</Signal>
+                <Signal>core/cpu/alu/io_out[3]</Signal>
+                <Signal>core/cpu/alu/io_out[2]</Signal>
+                <Signal>core/cpu/alu/io_out[1]</Signal>
+                <Signal>core/cpu/alu/io_out[0]</Signal>
             </Bus>
-            <Bus capture_enable="true" name="lcd/mmio_data[7:0]">
-                <Signal>lcd/mmio_data[7]</Signal>
-                <Signal>lcd/mmio_data[6]</Signal>
-                <Signal>lcd/mmio_data[5]</Signal>
-                <Signal>lcd/mmio_data[4]</Signal>
-                <Signal>lcd/mmio_data[3]</Signal>
-                <Signal>lcd/mmio_data[2]</Signal>
-                <Signal>lcd/mmio_data[1]</Signal>
-                <Signal>lcd/mmio_data[0]</Signal>
-            </Bus>
-            <Bus capture_enable="true" name="lcd/r[4:0]">
-                <Signal>lcd/r[4]</Signal>
-                <Signal>lcd/r[3]</Signal>
-                <Signal>lcd/r[2]</Signal>
-                <Signal>lcd/r[1]</Signal>
-                <Signal>lcd/r[0]</Signal>
-            </Bus>
-            <Bus capture_enable="true" name="lcd/g[5:0]">
-                <Signal>lcd/g[5]</Signal>
-                <Signal>lcd/g[4]</Signal>
-                <Signal>lcd/g[3]</Signal>
-                <Signal>lcd/g[2]</Signal>
-                <Signal>lcd/g[1]</Signal>
-                <Signal>lcd/g[0]</Signal>
-            </Bus>
-            <Bus capture_enable="true" name="lcd/b[4:0]">
-                <Signal>lcd/b[4]</Signal>
-                <Signal>lcd/b[3]</Signal>
-                <Signal>lcd/b[2]</Signal>
-                <Signal>lcd/b[1]</Signal>
-                <Signal>lcd/b[0]</Signal>
-            </Bus>
-            <Signal capture_enable="true">lcd/mmio_req</Signal>
-            <Signal capture_enable="true">lcd/mmio_done</Signal>
-            <Signal capture_enable="true">lcd/dclk</Signal>
-            <Signal capture_enable="true">lcd/de</Signal>
-            <Signal capture_enable="true">lcd/hs</Signal>
-            <Signal capture_enable="true">lcd/vs</Signal>
-            <Bus capture_enable="true" name="lcd/lcd_text_vram_pos[9:0]">
-                <Signal>lcd/lcd_text_vram_pos[9]</Signal>
-                <Signal>lcd/lcd_text_vram_pos[8]</Signal>
-                <Signal>lcd/lcd_text_vram_pos[7]</Signal>
-                <Signal>lcd/lcd_text_vram_pos[6]</Signal>
-                <Signal>lcd/lcd_text_vram_pos[5]</Signal>
-                <Signal>lcd/lcd_text_vram_pos[4]</Signal>
-                <Signal>lcd/lcd_text_vram_pos[3]</Signal>
-                <Signal>lcd/lcd_text_vram_pos[2]</Signal>
-                <Signal>lcd/lcd_text_vram_pos[1]</Signal>
-                <Signal>lcd/lcd_text_vram_pos[0]</Signal>
+            <Signal capture_enable="true">core/cpu/io_memInstReq</Signal>
+            <Signal capture_enable="true">core/cpu/io_memInstDone</Signal>
+            <Bus capture_enable="true" name="core/cpu/state[1:0]">
+                <Signal>core/cpu/state[1]</Signal>
+                <Signal>core/cpu/state[0]</Signal>
             </Bus>
         </SignalList>
         <Triggers>
             <Trigger index="0">
                 <SignalList>
-                    <Signal>reset</Signal>
+                    <Signal>init_done</Signal>
                 </SignalList>
             </Trigger>
             <Trigger index="1"/>
@@ -227,5 +167,5 @@
             <Expression>M0</Expression>
         </Expressions>
     </AoCore>
-    <GAO_ID>0100001110100111</GAO_ID>
+    <GAO_ID>0000000100110100</GAO_ID>
 </GAO_CONFIG>

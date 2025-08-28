@@ -365,18 +365,15 @@
     sw r3, r2, 0 ; set
 .end_macro
 
-j #main
-
-main:
-    RESET_TITLE()
-    RESET_GAME()
-    j #loop
+RESET_TITLE()
+RESET_GAME()
+j #loop
 
 
 loop:
     MOVE_PADDLE()
-    ; jump to 0x108
+    ; jump to 0x106
     addi r1, r0, 0x1
     slli r1, r1, 8
-    addi r1, r1, 0x8
+    addi r1, r1, 0x6
     jmpr r0, r1, 0
