@@ -66,7 +66,7 @@ module Memory(
             inst_done_reg <= 1'b0;
             // data port
             if (data_req) begin
-                if (data_addr < 16'h8000) begin
+                if (data_addr < 16'hf000) begin
                     if (data_write) begin
                         dpb_write_en <= 1'b1;
                         if (data_addr[0] == 1'b0) begin
@@ -96,7 +96,7 @@ module Memory(
 
     assign data_done = data_done_reg;
     assign inst_done = inst_done_reg;
-    assign data_out = (data_addr >= 16'h8000) ? ((data_addr == `MMIO_ADDR_BTN) ? tmp_mmio_btn : 8'h00) : ((data_addr[0] == 1'b0) ? dpb_data_out_data[7:0] : dpb_data_out_data[15:8]);
+    assign data_out = (data_addr >= 16'hf000) ? ((data_addr == `MMIO_ADDR_BTN) ? tmp_mmio_btn : 8'h00) : ((data_addr[0] == 1'b0) ? dpb_data_out_data[7:0] : dpb_data_out_data[15:8]);
     assign inst_out = dpb_data_out_inst;
 
 endmodule
