@@ -135,6 +135,21 @@
     slli r5, r5, 12  ; 0xe000
 .end_macro
 
+; 32767 counts delay
+.macro DELAY()
+    addi r6, r0, 0x7   ; 0x0007
+    slli r6, r6, 4     ; 0x0070
+    addi r6, r6, 0xf   ; 0x007f
+    slli r6, r6, 4     ; 0x07f0
+    addi r6, r6, 0xf   ; 0x07ff
+    slli r6, r6, 4     ; 0x7ff0
+    addi r6, r6, 0xf   ; 0x7fff
+
+    addi r6, r6, -1
+    beq  r6, r0, 4
+    jmp  r0, -6
+.end_macro
+
 .macro WRITE_BLOCK()
     ; r2 = MMIO_LCD_ADDR
     SET_MMIO_LCD_BGFG_TO_R4()
@@ -319,7 +334,7 @@
 
     ; read button state to r7
     SET_MMIO_BTN_ADDR_TO_R2()
-    lb r7, r2, 0
+    lbu r7, r2, 0
 
     ; button 2 (bit 1) - move right
     andi r4, r7, 0b10
@@ -331,14 +346,14 @@
     addi r1, r1, 0xf ; 0x00ff
     slli r1, r1, 4   ; 0x0ff0
     addi r1, r1, 0xe ; 0x0ffe
-    slli r1, r1, 4   ; 0x0ffe0
-    addi r1, r1, 0x4 ; 0x0ffe4
+    slli r1, r1, 4   ; 0xffe0
+    addi r1, r1, 0x4 ; 0xffe4
 
     ; if r4 != r3, pc += 6
     bne r4, r3, 6
 
-    ; if r1 == r6, pc += 4
-    beq r1, r6, 4
+    ; if r1 >= r6, pc += 4
+    bge r1, r6, 4
 
     addi r6, r6, -1
 
@@ -346,7 +361,7 @@
     andi r4, r7, 0b100
     addi r3, r0, 0b100
 
-    ; r6 clip min = 27
+    ; r6 clip max = 27
     addi r7, r0, 0x1 ; 0x0001
     slli r7, r7, 4   ; 0x0010
     addi r7, r7, 0xb ; 0x001b
@@ -354,8 +369,8 @@
     ; if r4 != r3, pc += 6
     bne r4, r3, 6
 
-    ; if r7 == r6, pc += 4
-    beq r7, r6, 4
+    ; if r6 >= r7, pc += 4
+    bge r6, r7, 4
 
     addi r6, r6, 1
 
@@ -369,7 +384,7 @@
     slli r1, r1, 4 ; 0x0060
     addi r1, r1, 9 ; 0x0069
     slli r1, r1, 4 ; 0x0690
-    or r2, r2, r1  ; 0xf694
+    add r2, r2, r1  ; 0xf004 + 0x0690 = 0xf694
 
     SET_MMIO_LCD_ASCII_SPACE_TO_R3()
     SET_MMIO_LCD_BGFG_TO_R4()
@@ -422,6 +437,7 @@ j #loop
 
 loop:
     MOVE_PADDLE()
+    DELAY()
     ; jump to loop top (0x126)
     addi r1, r0, 0x1
     slli r1, r1, 4
