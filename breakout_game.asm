@@ -227,7 +227,32 @@
     addi r2, r2, 2
 .end_macro
 
+.macro CLEAR_DISPLAY()
+    SET_MMIO_LCD_ADDR_TO_R2()
+    ; clear 60 chars * 17 lines
+    ; 60 * 17 = 1020 counts loop
+    ; set counter to r3
+    addi r3, r0, 0x3 ; 0x0003
+    slli r3, r3, 4   ; 0x0030
+    addi r3, r3, 0xf ; 0x003f
+    slli r3, r3, 4   ; 0x03f0
+    addi r3, r3, 0xc ; 0x03fc
+
+    sw r0, r2, 0 ; set zero
+    addi r2, r2, 2
+    ; decrement counter
+    addi r3, r3, -1
+
+    ; if r3 == 0, pc += 4
+    beq r3, r0, 4
+    jmp r0, -8
+.end_macro
+
 .macro RESET_GAME()
+    ; reset game state
+    SET_GAME_STATE_ADDR_TO_R5()
+    sw r0, r5, 0
+
     SET_MMIO_LCD_ADDR_TO_R2()
     ; offset + 240
     addi r4, r0, 0xf
@@ -300,14 +325,38 @@
     andi r4, r7, 0b10
     addi r3, r0, 0b10
 
-    bne r4, r3, 4
+    ; r6 clip min = -28
+    addi r1, r0, 0xf ; 0x000f
+    slli r1, r1, 4   ; 0x00f0
+    addi r1, r1, 0xf ; 0x00ff
+    slli r1, r1, 4   ; 0x0ff0
+    addi r1, r1, 0xe ; 0x0ffe
+    slli r1, r1, 4   ; 0x0ffe0
+    addi r1, r1, 0x4 ; 0x0ffe4
+
+    ; if r4 != r3, pc += 6
+    bne r4, r3, 6
+
+    ; if r1 == r6, pc += 4
+    beq r1, r6, 4
+
     addi r6, r6, -1
 
     ; button 3 (bit 2) - move left
     andi r4, r7, 0b100
     addi r3, r0, 0b100
 
-    bne r4, r3, 4
+    ; r6 clip min = 27
+    addi r7, r0, 0x1 ; 0x0001
+    slli r7, r7, 4   ; 0x0010
+    addi r7, r7, 0xb ; 0x001b
+
+    ; if r4 != r3, pc += 6
+    bne r4, r3, 6
+
+    ; if r7 == r6, pc += 4
+    beq r7, r6, 4
+
     addi r6, r6, 1
 
     ; update state
@@ -365,6 +414,7 @@
     sw r3, r2, 0 ; set
 .end_macro
 
+CLEAR_DISPLAY()
 RESET_TITLE()
 RESET_GAME()
 j #loop
@@ -372,8 +422,10 @@ j #loop
 
 loop:
     MOVE_PADDLE()
-    ; jump to 0x106
+    ; jump to loop top (0x126)
     addi r1, r0, 0x1
-    slli r1, r1, 8
+    slli r1, r1, 4
+    addi r1, r1, 0x2
+    slli r1, r1, 4
     addi r1, r1, 0x6
     jmpr r0, r1, 0
