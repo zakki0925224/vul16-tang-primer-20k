@@ -5,7 +5,10 @@
 ; Button 3 - Move paddle left
 
 ; Game state at 0xe000
-; +0: paddle_x (i16)
+;  +0: paddle_x_offset (i16) (default: 0) (original position)
+;  +2: ball_x_offset (u16) (default: 29) (global position)
+;  +4: ball_y_offset (u16) (default: 13)
+;  +6: ball_move_direction (0: up-right, 1: up-left, 2: down-right, 3: down-left, 4: right-up, 5: right-down, 6: left-up, 7: left-down) (u16) (default: 0)
 
 ; MMIO_BTN = 0xf002
 ; MMIO_LCD = 0xf004~
@@ -274,7 +277,20 @@
 .macro RESET_GAME()
     ; reset game state
     SET_GAME_STATE_ADDR_TO_R5()
-    sw r0, r5, 0
+    sw r0, r5, 0   ; paddle_x_offset
+    addi r5, r5, 2
+
+    addi r1, r0, 0x1
+    slli r1, r1, 4
+    addi r1, r1, 0xd
+    sw r1, r5, 0     ; ball_x_offset
+    addi r5, r5, 2
+
+    addi r2, r0, 0xd
+    sw r2, r5, 0     ; ball_y_offset
+    addi r5, r5, 2
+
+    sw r0, r5, 0   ; ball_move_direction
 
     SET_MMIO_LCD_ADDR_TO_R2()
     ; offset + 240
@@ -336,7 +352,7 @@
 .end_macro
 
 .macro MOVE_PADDLE()
-    ; read game state paddle_x to r6
+    ; read game state paddle_x_offset to r6
     SET_GAME_STATE_ADDR_TO_R5()
     lw r6, r5, 0
 
@@ -437,6 +453,68 @@
     sw r3, r2, 0 ; set
 .end_macro
 
+.macro MOVE_BALL()
+    ; read game state (ball_x_offset, ball_y_offset)
+    SET_GAME_STATE_ADDR_TO_R5()
+    addi r5, r5, 2          ; point to ball_x_offset
+    lw   r6, r5, 0          ; r6 = ball_x
+    lw   r7, r5, 2          ; r7 = ball_y
+
+    ; clear old ball
+    SET_MMIO_LCD_ADDR_TO_R2()
+    addi r3, r0, 0          ; accumulator = 0
+    addi r4, r0, 0x3
+    slli r4, r4, 4
+    addi r4, r4, 0xc        ; r4 = 60
+    add  r1, r0, r7         ; r1 = y (loop counter)
+
+    ; y * 60 (does not destroy r7)
+    beq  r1, r0, 8
+    add  r3, r3, r4
+    addi r1, r1, -1
+    jmp  r0, -6
+
+    add  r3, r3, r6
+    slli r3, r3, 1          ; *2 (bytes per cell)
+    add  r2, r2, r3         ; address of old ball
+
+    SET_MMIO_LCD_ASCII_SPACE_TO_R3()
+    SET_MMIO_LCD_BGFG_REV_TO_R4()
+    or   r3, r3, r4
+    sw   r3, r2, 0          ; clear old ball
+
+    ; update y (move up by 1 if not top)
+    beq  r7, r0, 4
+    addi r7, r7, -1
+
+    ; draw new ball
+    SET_MMIO_LCD_ADDR_TO_R2()
+    addi r3, r0, 0
+    addi r4, r0, 0x3
+    slli r4, r4, 4
+    addi r4, r4, 0xc        ; r4 = 60
+    add  r1, r0, r7         ; r1 = new y (loop counter)
+
+    ; new_y * 60
+    beq  r1, r0, 8
+    add  r3, r3, r4
+    addi r1, r1, -1
+    jmp  r0, -6
+
+    add  r3, r3, r6
+    slli r3, r3, 1
+    add  r2, r2, r3
+
+    SET_MMIO_LCD_ASCII_o_TO_R3()
+    SET_MMIO_LCD_BGFG_REV_TO_R4()
+    or   r3, r3, r4
+    sw   r3, r2, 0          ; draw new ball
+
+    ; store new state
+    sw   r6, r5, 0          ; ball_x (unchanged yet)
+    sw   r7, r5, 2          ; ball_y (updated)
+.end_macro
+
 CLEAR_DISPLAY()
 RESET_TITLE()
 RESET_GAME()
@@ -445,11 +523,12 @@ j #loop
 
 loop:
     MOVE_PADDLE()
+    MOVE_BALL()
     DELAY()
-    ; jump to loop top (0x126)
+    ; jump to loop top (0x13a)
     addi r1, r0, 0x1
     slli r1, r1, 4
-    addi r1, r1, 0x2
+    addi r1, r1, 0x3
     slli r1, r1, 4
-    addi r1, r1, 0x6
+    addi r1, r1, 0xa
     jmpr r0, r1, 0
