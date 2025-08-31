@@ -321,41 +321,6 @@
 
     ; jump to loop top (offset -48)
     jmp r0, -48
-
-    ; write paddle
-    ; offset + 774
-    addi r4, r0, 0x3
-    slli r4, r4, 8
-    addi r4, r4, 0x6
-    add r2, r2, r4
-
-    SET_MMIO_LCD_ASCII_EQ_TO_R3()
-    SET_MMIO_LCD_BGFG_TO_R4()
-    or r3, r3, r4
-    sw r3, r2, 0 ; set
-    addi r2, r2, 2
-    sw r3, r2, 0 ; set
-    addi r2, r2, 2
-    sw r3, r2, 0 ; set
-    addi r2, r2, 2
-    sw r3, r2, 0 ; set
-    addi r2, r2, 2
-    sw r3, r2, 0 ; set
-
-    ; offset - 124
-    addi r4, r0, 0xf
-    slli r4, r4, 4
-    addi r4, r4, 0xf
-    slli r4, r4, 4
-    addi r4, r4, 0x8
-    slli r4, r4, 4
-    addi r4, r4, 0x4
-    add r2, r2, r4
-
-    SET_MMIO_LCD_ASCII_o_TO_R3()
-    SET_MMIO_LCD_BGFG_TO_R4()
-    or r3, r3, r4
-    sw r3, r2, 0 ; set
 .end_macro
 
 .macro MOVE_PADDLE()
@@ -501,6 +466,24 @@
     ; if moving up, reverse vertical dir
     xori r3, r3, 0b10
     ; ==================================
+    ; if reached the screen right
+    ; r6 < 59, pc += 4
+    addi r1, r0, 3
+    slli r1, r1, 4
+    addi r1, r1, 0xb
+    blt r6, r1, 4
+    ; ===== reached the screen right =====
+    ; horizontal dir = 1 (left)
+    ori r3, r3, 0b1
+    ; ====================================
+
+    ; if reached the screen left
+    ; r6 != 0, pc += 4
+    bne r6, r0, 4
+    ; ===== reached the screen right =====
+    ; horizontal dir = 0 (right)
+    andi r3, r3, 0b110
+    ; ====================================
 
     ; paddle_x
     ; if moving down && ball_y == 13 && (-paddle_x + 27 <= ball_x <= -paddle_x + 31)
@@ -545,12 +528,17 @@
     addi r4, r4, 1
 
     addi r2, r0, 3
-    ; if r4 != r2, pc += 6
-    bne  r4, r2, 6
+    ; if r4 == r2, pc += 4
+    beq  r4, r2, 4
+    jmp r0, 14
     ; reset accum
     addi r4, r0, 0
-    ; ball_x += 1
+
+    andi r2, r3, 1
+    bne r2, r0, 6
     addi r6, r6, 1
+    jmp r0, 4
+    addi r6, r6, -1
 
     ; store new state
     sw  r3, r5, 4
@@ -594,10 +582,10 @@ loop:
     MOVE_PADDLE()
     MOVE_BALL()
     DELAY()
-    ; jump to loop top (0x13e)
-    addi r1, r0, 0x1
+    ; jump to loop top (0x0fa)
+    addi r1, r0, 0x0
     slli r1, r1, 4
-    addi r1, r1, 0x3
+    addi r1, r1, 0xf
     slli r1, r1, 4
-    addi r1, r1, 0xe
+    addi r1, r1, 0xa
     jmpr r0, r1, 0
