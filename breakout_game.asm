@@ -8,7 +8,11 @@
 ;  +0: paddle_x_offset (i16) (default: 0) (original position)
 ;  +2: ball_x_offset (u16) (default: 29) (global position)
 ;  +4: ball_y_offset (u16) (default: 13)
-;  +6: ball_move_direction (0: up-right, 1: up-left, 2: down-right, 3: down-left, 4: right-up, 5: right-down, 6: left-up, 7: left-down) (u16) (default: 0)
+;  +6: ball_move_direction (u16) (default: 0)
+;       bit2: 0=vertical-major, 1=horizontal-major
+;       bit1: vertical dir (0=up, 1=down)
+;       bit0: horizontal dir (0=right, 1=left)
+;  +8: ball_step_accum (u16) (0..2) (default: 0)
 
 ; MMIO_BTN = 0xf002
 ; MMIO_LCD = 0xf004~
@@ -291,6 +295,9 @@
     addi r5, r5, 2
 
     sw r0, r5, 0   ; ball_move_direction
+    addi r5, r5, 2
+
+    sw r0, r5, 0   ; ball_step_accum
 
     SET_MMIO_LCD_ADDR_TO_R2()
     ; offset + 240
@@ -483,9 +490,71 @@
     or   r3, r3, r4
     sw   r3, r2, 0          ; clear old ball
 
-    ; update y (move up by 1 if not top)
-    beq  r7, r0, 4
+    ; update ball position
+    lw r3, r5, 4            ; r3 = ball_move_direction
+    lw r4, r5, 6            ; r4 = ball_step_accum
+
+    ; if not reached the screen top
+    ; r7 != r0, pc += 4
+    bne r7, r0, 4
+    ; ===== reached the screen top =====
+    ; if moving up, reverse vertical dir
+    xori r3, r3, 0b10
+    ; ==================================
+
+    ; paddle_x
+    ; if moving down && ball_y == 13 && (-paddle_x + 27 <= ball_x <= -paddle_x + 31)
+    addi r1, r0, 0b10
+    and r1, r1, r3
+    ; if r1 != r0, pc += 4
+    bne r1, r0, 4
+    jmp r0, 32
+
+    ; if ball_y == 13, pc += 4
+    addi r1, r0, 13
+    beq r7, r1, 4
+    jmp r0, 26
+
+    ; read paddle_x
+    lw r1, r5, -2           ; r1 = paddle_x_offset
+    sub r1, r0, r1          ; r1 = -paddle_x_offset
+    addi r2, r0, 1
+    slli r2, r2, 4
+    addi r2, r2, 0xb        ; 0x1b + 27
+    add r1, r1, r2
+
+    ; if ball_x >= paddle_x
+    bge r6, r1, 4
+    jmp r0, 10
+
+    addi r1, r1, 4
+    ; if paddle_x >= ball_x
+    bge r1, r6, 4
+    jmp r0, 4
+
+    ; if moving down and ball on paddle, reverse vertical dir
+    xori r3, r3, 0b10
+
+    ; =======================================
+    andi r2, r3, 0b10
+    beq r2, r0, 6
+    addi r7, r7, 1
+    jmp r0, 4
     addi r7, r7, -1
+
+    addi r4, r4, 1
+
+    addi r2, r0, 3
+    ; if r4 != r2, pc += 6
+    bne  r4, r2, 6
+    ; reset accum
+    addi r4, r0, 0
+    ; ball_x += 1
+    addi r6, r6, 1
+
+    ; store new state
+    sw  r3, r5, 4
+    sw  r4, r5, 6
 
     ; draw new ball
     SET_MMIO_LCD_ADDR_TO_R2()
@@ -525,10 +594,10 @@ loop:
     MOVE_PADDLE()
     MOVE_BALL()
     DELAY()
-    ; jump to loop top (0x13a)
+    ; jump to loop top (0x13e)
     addi r1, r0, 0x1
     slli r1, r1, 4
     addi r1, r1, 0x3
     slli r1, r1, 4
-    addi r1, r1, 0xa
+    addi r1, r1, 0xe
     jmpr r0, r1, 0
