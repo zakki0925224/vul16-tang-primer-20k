@@ -9,7 +9,7 @@
 ;  +2: ball_x_offset (u16) (default: 29) (global position)
 ;  +4: ball_y_offset (u16) (default: 13)
 ;  +6: ball_move_direction (u16) (default: 0)
-;       bit2: 0=vertical-major, 1=horizontal-major
+;       bit2: 0=vertical-major, 1=horizontal-major (reserved)
 ;       bit1: vertical dir (0=up, 1=down)
 ;       bit0: horizontal dir (0=right, 1=left)
 ;  +8: ball_step_accum (u16) (0..2) (default: 0)
@@ -19,6 +19,7 @@
 ; +16: block_map_3 (u16) (default: 0x7fff)
 ; +18: block_map_4 (u16) (default: 0x7fff)
 ; +20: block_map_5 (u16) (default: 0x7fff)
+; +22: game_over_flag (u16) (default: 0)
 
 ; MMIO_BTN = 0xf002
 ; MMIO_LCD = 0xf004~
@@ -336,6 +337,8 @@
     sw r1, r5, 0     ; block_map_4
     addi r5, r5, 2
     sw r1, r5, 0     ; block_map_5
+    addi r5, r5, 2
+    sw r0, r5, 0   ; game_over_flag
 
     SET_MMIO_LCD_ADDR_TO_R2()
     ; offset + 240
@@ -489,7 +492,7 @@
     add  r2, r2, r3         ; address of old ball
 
     SET_MMIO_LCD_ASCII_SPACE_TO_R3()
-    SET_MMIO_LCD_BGFG_REV_TO_R4()
+    SET_MMIO_LCD_BGFG_TO_R4()
     or   r3, r3, r4
     sw   r3, r2, 0          ; clear old ball
 
@@ -523,6 +526,17 @@
     ; horizontal dir = 0 (right)
     andi r3, r3, 0b110
     ; ====================================
+
+    ; if reached the screen bottom -> game over
+    ; r7 < 16, pc += 12
+    addi r1, r0, 1
+    slli r1, r1, 4
+    blt r7, r1, 12
+    addi r1, r0, 1
+    addi r5, r5, 15
+    addi r5, r5, 5
+    sw r1, r5, 0
+    jmp r0, 122
 
     ; paddle_x
     ; if moving down && ball_y == 13 && (-paddle_x + 27 <= ball_x <= -paddle_x + 31)
@@ -602,7 +616,7 @@
     add  r2, r2, r3
 
     SET_MMIO_LCD_ASCII_o_TO_R3()
-    SET_MMIO_LCD_BGFG_REV_TO_R4()
+    SET_MMIO_LCD_BGFG_TO_R4()
     or   r3, r3, r4
     sw   r3, r2, 0          ; draw new ball
 
@@ -633,7 +647,7 @@
 
     ; if block is not empty, pc += 4
     bne r3, r0, 4
-    jmp r0, 58
+    jmp r0, 64
 
     ; remove target block from block map
     lw r3, r5, 0     ; reload
@@ -659,6 +673,28 @@
     SET_MMIO_LCD_ADDR_TO_R2() ; 2 instructions
     add r2, r2, r6
     CLEAR_BLOCK() ; 9 instructions
+
+    ; update ball move direction
+    ; reverse vertical dir (bit 1)
+    xori r7, r7, 0b10
+    SET_GAME_STATE_ADDR_TO_R5() ; 2 instructions
+    sw r7, r5, 6
+.end_macro
+
+.macro GAME_OVER()
+    ; read game_over_flag
+    SET_GAME_STATE_ADDR_TO_R5()
+    addi r5, r5, 15
+    addi r5, r5, 7
+    lw r1, r5, 0
+    addi r2, r0, 1
+
+    ; if r1 == 1, pc += 4
+    beq r1, r2, 4
+    jmp r0, 32
+    CLEAR_DISPLAY() ; 13 instructions
+    nop
+    jmp r0, -2
 .end_macro
 
 CLEAR_DISPLAY()
@@ -670,12 +706,13 @@ j #loop
 loop:
     MOVE_PADDLE()
     MOVE_BALL()
+    GAME_OVER()
     BLOCK_COLLISION()
     DELAY()
-    ; jump to loop top (0x120)
+    ; jump to loop top (0x124)
     addi r1, r0, 0x1
     slli r1, r1, 4
     addi r1, r1, 0x2
     slli r1, r1, 4
-    addi r1, r1, 0x0
+    addi r1, r1, 0x4
     jmpr r0, r1, 0
