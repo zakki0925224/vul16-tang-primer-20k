@@ -13,6 +13,12 @@
 ;       bit1: vertical dir (0=up, 1=down)
 ;       bit0: horizontal dir (0=right, 1=left)
 ;  +8: ball_step_accum (u16) (0..2) (default: 0)
+; +10: block_map_0 (u16) (default: 0x7fff)
+; +12: block_map_1 (u16) (default: 0x7fff)
+; +14: block_map_2 (u16) (default: 0x7fff)
+; +16: block_map_3 (u16) (default: 0x7fff)
+; +18: block_map_4 (u16) (default: 0x7fff)
+; +20: block_map_5 (u16) (default: 0x7fff)
 
 ; MMIO_BTN = 0xf002
 ; MMIO_LCD = 0xf004~
@@ -192,6 +198,18 @@
     addi r2, r2, 2
 .end_macro
 
+.macro CLEAR_BLOCK()
+    ; r2 = MMIO_LCD_ADDR
+    SET_MMIO_LCD_BGFG_TO_R4()
+    ; space
+    SET_MMIO_LCD_ASCII_SPACE_TO_R3()
+    or r3, r3, r4
+    sw r3, r2, 0 ; set
+    sw r3, r2, 2 ; set
+    sw r3, r2, 4 ; set
+    sw r3, r2, 6 ; set
+.end_macro
+
 .macro RESET_TITLE()
     SET_MMIO_LCD_ADDR_TO_R2()
     ; offset + 50
@@ -298,6 +316,26 @@
     addi r5, r5, 2
 
     sw r0, r5, 0   ; ball_step_accum
+    addi r5, r5, 2
+
+    addi r1, r0, 0x7 ; 0x0007
+    slli r1, r1, 4   ; 0x0070
+    addi r1, r1, 0xf ; 0x007f
+    slli r1, r1, 4   ; 0x07f0
+    addi r1, r1, 0xf ; 0x07ff
+    slli r1, r1, 4   ; 0x7ff0
+    addi r1, r1, 0xf ; 0x7fff
+    sw r1, r5, 0     ; block_map_0
+    addi r5, r5, 2
+    sw r1, r5, 0     ; block_map_1
+    addi r5, r5, 2
+    sw r1, r5, 0     ; block_map_2
+    addi r5, r5, 2
+    sw r1, r5, 0     ; block_map_3
+    addi r5, r5, 2
+    sw r1, r5, 0     ; block_map_4
+    addi r5, r5, 2
+    sw r1, r5, 0     ; block_map_5
 
     SET_MMIO_LCD_ADDR_TO_R2()
     ; offset + 240
@@ -459,9 +497,10 @@
     lw r3, r5, 4            ; r3 = ball_move_direction
     lw r4, r5, 6            ; r4 = ball_step_accum
 
-    ; if not reached the screen top
+    ; if not reached the screen top (y = 2)
+    addi r1, r0, 2
     ; r7 != r0, pc += 4
-    bne r7, r0, 4
+    bne r7, r1, 4
     ; ===== reached the screen top =====
     ; if moving up, reverse vertical dir
     xori r3, r3, 0b10
@@ -572,6 +611,56 @@
     sw   r7, r5, 2          ; ball_y (updated)
 .end_macro
 
+.macro BLOCK_COLLISION()
+    ; read ball_x_offset, ball_y_offset, ball_move_direction
+    SET_GAME_STATE_ADDR_TO_R5()
+    addi r5, r5, 2          ; point to ball_x_offset
+    lw r4, r5, 0            ; r4 = ball_x
+    lw r6, r5, 2            ; r6 = ball_y
+    lw r7, r5, 4            ; r7 = ball_move_direction
+
+    ; convert to block position
+    srli r4, r4, 2          ; block_x = ball_x / 4
+    addi r6, r6, -2         ; block_y = ball_y - 2
+
+    ; read block_map[block_y]
+    addi r5, r5, 8
+    slli r6, r6, 1          ; block_y * 2 (byte offset)
+    add r5, r5, r6
+    lw r3, r5, 0           ; r3 = block_map[block_y]
+    srl r3, r3, r4         ; r3 = block_map[block_y] >> block_x
+    andi r3, r3, 1         ; r3 = block_map[block_y] >> block_x & 1
+
+    ; if block is not empty, pc += 4
+    bne r3, r0, 4
+    jmp r0, 58
+
+    ; remove target block from block map
+    lw r3, r5, 0     ; reload
+    addi r2, r0, 1   ; bit mask
+    sll r2, r2, r4
+    addi r1, r0, -1
+    xor r2, r2, r1   ; reverse mask
+    and r3, r3, r2   ; clear
+    sw r3, r5, 0     ; store back
+
+    ; remove target block from lcd
+    ; offset + ((block_y + 2) * 60 + block_x * 4) * 2
+    srli r6, r6, 1         ; block_y / 2
+    addi r6, r6, 2         ; block_y + 2
+    add r2, r0, r6         ; copy r6
+    slli r6, r6, 6         ; (block_y + 2) * 64
+    slli r2, r2, 2         ; (block_y + 2) * 4
+    sub r6, r6, r2         ; (block_y + 2) * 60
+    slli r4, r4, 2         ; block_x * 4
+    add r6, r6, r4
+    slli r6, r6, 1         ; * 2
+
+    SET_MMIO_LCD_ADDR_TO_R2() ; 2 instructions
+    add r2, r2, r6
+    CLEAR_BLOCK() ; 9 instructions
+.end_macro
+
 CLEAR_DISPLAY()
 RESET_TITLE()
 RESET_GAME()
@@ -581,11 +670,12 @@ j #loop
 loop:
     MOVE_PADDLE()
     MOVE_BALL()
+    BLOCK_COLLISION()
     DELAY()
-    ; jump to loop top (0x0fa)
-    addi r1, r0, 0x0
+    ; jump to loop top (0x120)
+    addi r1, r0, 0x1
     slli r1, r1, 4
-    addi r1, r1, 0xf
+    addi r1, r1, 0x2
     slli r1, r1, 4
-    addi r1, r1, 0xa
+    addi r1, r1, 0x0
     jmpr r0, r1, 0
