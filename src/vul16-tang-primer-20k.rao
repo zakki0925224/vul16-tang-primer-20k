@@ -122,6 +122,47 @@
                 <Signal>core/cpu/state[1]</Signal>
                 <Signal>core/cpu/state[0]</Signal>
             </Bus>
+            <Bus capture_enable="true" name="core/cpu/io_memDataAddr[15:0]">
+                <Signal>core/cpu/io_memDataAddr[15]</Signal>
+                <Signal>core/cpu/io_memDataAddr[14]</Signal>
+                <Signal>core/cpu/io_memDataAddr[13]</Signal>
+                <Signal>core/cpu/io_memDataAddr[12]</Signal>
+                <Signal>core/cpu/io_memDataAddr[11]</Signal>
+                <Signal>core/cpu/io_memDataAddr[10]</Signal>
+                <Signal>core/cpu/io_memDataAddr[9]</Signal>
+                <Signal>core/cpu/io_memDataAddr[8]</Signal>
+                <Signal>core/cpu/io_memDataAddr[7]</Signal>
+                <Signal>core/cpu/io_memDataAddr[6]</Signal>
+                <Signal>core/cpu/io_memDataAddr[5]</Signal>
+                <Signal>core/cpu/io_memDataAddr[4]</Signal>
+                <Signal>core/cpu/io_memDataAddr[3]</Signal>
+                <Signal>core/cpu/io_memDataAddr[2]</Signal>
+                <Signal>core/cpu/io_memDataAddr[1]</Signal>
+                <Signal>core/cpu/io_memDataAddr[0]</Signal>
+            </Bus>
+            <Bus capture_enable="true" name="core/cpu/io_memDataIn[7:0]">
+                <Signal>core/cpu/io_memDataIn[7]</Signal>
+                <Signal>core/cpu/io_memDataIn[6]</Signal>
+                <Signal>core/cpu/io_memDataIn[5]</Signal>
+                <Signal>core/cpu/io_memDataIn[4]</Signal>
+                <Signal>core/cpu/io_memDataIn[3]</Signal>
+                <Signal>core/cpu/io_memDataIn[2]</Signal>
+                <Signal>core/cpu/io_memDataIn[1]</Signal>
+                <Signal>core/cpu/io_memDataIn[0]</Signal>
+            </Bus>
+            <Bus capture_enable="true" name="core/cpu/io_memDataOut[7:0]">
+                <Signal>core/cpu/io_memDataOut[7]</Signal>
+                <Signal>core/cpu/io_memDataOut[6]</Signal>
+                <Signal>core/cpu/io_memDataOut[5]</Signal>
+                <Signal>core/cpu/io_memDataOut[4]</Signal>
+                <Signal>core/cpu/io_memDataOut[3]</Signal>
+                <Signal>core/cpu/io_memDataOut[2]</Signal>
+                <Signal>core/cpu/io_memDataOut[1]</Signal>
+                <Signal>core/cpu/io_memDataOut[0]</Signal>
+            </Bus>
+            <Signal capture_enable="true">core/cpu/io_memDataWrite</Signal>
+            <Signal capture_enable="true">core/cpu/io_memDataReq</Signal>
+            <Signal capture_enable="true">core/cpu/io_memDataDone</Signal>
         </SignalList>
         <Triggers>
             <Trigger index="0">
@@ -167,5 +208,5 @@
             <Expression>M0</Expression>
         </Expressions>
     </AoCore>
-    <GAO_ID>0000000100110100</GAO_ID>
+    <GAO_ID>1100110000111100</GAO_ID>
 </GAO_CONFIG>
