@@ -149,7 +149,7 @@
     slli r5, r5, 12  ; 0xe000
 .end_macro
 
-; 32767 * 5 counts delay
+; 32767 * 7 counts delay
 .macro DELAY()
     addi r6, r0, 0x7   ; 0x0007
     slli r6, r6, 4     ; 0x0070
@@ -159,7 +159,7 @@
     slli r6, r6, 4     ; 0x7ff0
     addi r6, r6, 0xf   ; 0x7fff
 
-    addi r7, r0, 0x5   ; 0x0005
+    addi r7, r0, 0x7   ; 0x0007
 
     addi r6, r6, -1
 
