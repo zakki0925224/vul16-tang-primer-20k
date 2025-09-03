@@ -110,6 +110,54 @@
     addi r3, r3, 4 ; 0x74 - ascii 't'
 .end_macro
 
+.macro SET_MMIO_LCD_ASCII_G_TO_R3()
+    addi r3, r0, 4 ; 0x04
+    slli r3, r3, 4 ; 0x40
+    addi r3, r3, 7 ; 0x47 - ascii 'G'
+.end_macro
+
+.macro SET_MMIO_LCD_ASCII_A_TO_R3()
+    addi r3, r0, 4 ; 0x04
+    slli r3, r3, 4 ; 0x40
+    addi r3, r3, 1 ; 0x41 - ascii 'A'
+.end_macro
+
+.macro SET_MMIO_LCD_ASCII_M_TO_R3()
+    addi r3, r0, 4 ; 0x04
+    slli r3, r3, 4 ; 0x40
+    addi r3, r3, 0xd ; 0x4d - ascii 'M'
+.end_macro
+
+.macro SET_MMIO_LCD_ASCII_E_TO_R3()
+    addi r3, r0, 4 ; 0x04
+    slli r3, r3, 4 ; 0x40
+    addi r3, r3, 5 ; 0x45 - ascii 'E'
+.end_macro
+
+.macro SET_MMIO_LCD_ASCII_O_TO_R3()
+    addi r3, r0, 4 ; 0x04
+    slli r3, r3, 4 ; 0x40
+    addi r3, r3, 0xf ; 0x4f - ascii 'O'
+.end_macro
+
+.macro SET_MMIO_LCD_ASCII_V_TO_R3()
+    addi r3, r0, 5 ; 0x05
+    slli r3, r3, 4 ; 0x50
+    addi r3, r3, 6 ; 0x56 - ascii 'V'
+.end_macro
+
+.macro SET_MMIO_LCD_ASCII_R_TO_R3()
+    addi r3, r0, 5 ; 0x05
+    slli r3, r3, 4 ; 0x50
+    addi r3, r3, 2 ; 0x52 - ascii 'R'
+.end_macro
+
+.macro SET_MMIO_LCD_ASCII_EX_TO_R3()
+    addi r3, r0, 2 ; 0x02
+    slli r3, r3, 4 ; 0x20
+    addi r3, r3, 1 ; 0x21 - ascii '!'
+.end_macro
+
 .macro SET_MMIO_LCD_ASCII_EQ_TO_R3()
     addi r3, r0, 3   ; 0x03
     slli r3, r3, 4   ; 0x30
@@ -271,6 +319,77 @@
 
     ; ===== t =====
     SET_MMIO_LCD_ASCII_t_TO_R3()
+    or r3, r3, r4
+    sw r3, r2, 0 ; set
+    addi r2, r2, 2
+.end_macro
+
+.macro SET_GAME_OVER_TITLE()
+    SET_MMIO_LCD_ADDR_TO_R2()
+    ; offset + 50
+    addi r4, r0, 0x3
+    slli r4, r4, 4
+    addi r4, r4, 0x2
+    add r2, r2, r4
+
+    SET_MMIO_LCD_BGFG_TO_R4()
+
+    ; ===== G =====
+    SET_MMIO_LCD_ASCII_G_TO_R3()
+    or r3, r3, r4
+    sw r3, r2, 0 ; set
+    addi r2, r2, 2
+
+    ; ===== A =====
+    SET_MMIO_LCD_ASCII_A_TO_R3()
+    or r3, r3, r4
+    sw r3, r2, 0 ; set
+    addi r2, r2, 2
+
+    ; ===== M =====
+    SET_MMIO_LCD_ASCII_M_TO_R3()
+    or r3, r3, r4
+    sw r3, r2, 0 ; set
+    addi r2, r2, 2
+
+    ; ===== E =====
+    SET_MMIO_LCD_ASCII_E_TO_R3()
+    or r3, r3, r4
+    sw r3, r2, 0 ; set
+    addi r2, r2, 2
+
+    ; ===== space =====
+    SET_MMIO_LCD_ASCII_SPACE_TO_R3()
+    or r3, r3, r4
+    sw r3, r2, 0 ; set
+    addi r2, r2, 2
+
+    ; ===== O =====
+    SET_MMIO_LCD_ASCII_O_TO_R3()
+    or r3, r3, r4
+    sw r3, r2, 0 ; set
+    addi r2, r2, 2
+
+    ; ===== V =====
+    SET_MMIO_LCD_ASCII_V_TO_R3()
+    or r3, r3, r4
+    sw r3, r2, 0 ; set
+    addi r2, r2, 2
+
+    ; ===== E =====
+    SET_MMIO_LCD_ASCII_E_TO_R3()
+    or r3, r3, r4
+    sw r3, r2, 0 ; set
+    addi r2, r2, 2
+
+    ; ===== R =====
+    SET_MMIO_LCD_ASCII_R_TO_R3()
+    or r3, r3, r4
+    sw r3, r2, 0 ; set
+    addi r2, r2, 2
+
+    ; ===== ! =====
+    SET_MMIO_LCD_ASCII_EX_TO_R3()
     or r3, r3, r4
     sw r3, r2, 0 ; set
     addi r2, r2, 2
@@ -689,10 +808,17 @@
     lw r1, r5, 0
     addi r2, r0, 1
 
-    ; if r1 == 1, pc += 4
-    beq r1, r2, 4
-    jmp r0, 32
+    ; if r1 == 1, pc += 14
+    beq r1, r2, 14
+    ; jump to BLOCK_COLLISION (0x340)
+    addi r1, r0, 0x3
+    slli r1, r1, 4
+    addi r1, r1, 0x4
+    slli r1, r1, 4
+    addi r1, r1, 0x0
+    jmpr r0, r1, 0
     CLEAR_DISPLAY() ; 13 instructions
+    SET_GAME_OVER_TITLE() ; 69 instructions
     nop
     jmp r0, -2
 .end_macro
