@@ -182,14 +182,16 @@
     addi r3, r3, 0xd ; 0x5d - ascii ']'
 .end_macro
 
-.macro SET_MMIO_LCD_BGFG_TO_R4()
+.macro SET_MMIO_LCD_BGFG_DEFAULT_TO_R4()
     addi r4, r0, 0xf ; BG: 0x0 (black) | FG: 0xf (white)
     slli r4, r4, 8
 .end_macro
 
-.macro SET_MMIO_LCD_BGFG_REV_TO_R4()
-    addi r4, r0, 0xf ; BG: 0xf (white) | FG: 0x0 (black)
-    slli r4, r4, 12
+.macro SET_MMIO_LCD_BGFG_CUSTOM_TO_R4($bg, $fg)
+    addi r4, r0, $bg
+    slli r4, r4, 4
+    addi r4, r4, $fg
+    slli r4, r4, 8
 .end_macro
 
 .macro SET_GAME_STATE_ADDR_TO_R5()
@@ -197,7 +199,7 @@
     slli r5, r5, 12  ; 0xe000
 .end_macro
 
-; 32767 * 7 counts delay
+; 32767 * 8 counts delay
 .macro DELAY()
     addi r6, r0, 0x7   ; 0x0007
     slli r6, r6, 4     ; 0x0070
@@ -207,7 +209,7 @@
     slli r6, r6, 4     ; 0x7ff0
     addi r6, r6, 0xf   ; 0x7fff
 
-    addi r7, r0, 0x7   ; 0x0007
+    addi r7, r0, 0x8   ; 0x0008
 
     addi r6, r6, -1
 
@@ -222,7 +224,7 @@
 
 .macro WRITE_BLOCK()
     ; r2 = MMIO_LCD_ADDR
-    SET_MMIO_LCD_BGFG_TO_R4()
+    ; r4 = BGFG
 
     ; ===== [ =====
     SET_MMIO_LCD_ASCII_L_SB_TO_R3()
@@ -249,7 +251,7 @@
 
 .macro CLEAR_BLOCK()
     ; r2 = MMIO_LCD_ADDR
-    SET_MMIO_LCD_BGFG_TO_R4()
+    SET_MMIO_LCD_BGFG_DEFAULT_TO_R4()
     ; space
     SET_MMIO_LCD_ASCII_SPACE_TO_R3()
     or r3, r3, r4
@@ -267,7 +269,7 @@
     addi r4, r4, 0x2
     add r2, r2, r4
 
-    SET_MMIO_LCD_BGFG_TO_R4()
+    SET_MMIO_LCD_BGFG_DEFAULT_TO_R4()
 
     ; ===== space =====
     SET_MMIO_LCD_ASCII_SPACE_TO_R3()
@@ -332,7 +334,7 @@
     addi r4, r4, 0x2
     add r2, r2, r4
 
-    SET_MMIO_LCD_BGFG_TO_R4()
+    SET_MMIO_LCD_BGFG_DEFAULT_TO_R4()
 
     ; ===== G =====
     SET_MMIO_LCD_ASCII_G_TO_R3()
@@ -465,22 +467,101 @@
     slli r4, r4, 4
     add r2, r2, r4
 
-    ; write blocks 15*6
+    ; =========== write 15 blocks (line 1) ===========
     ; set counter to r5
-    addi r5, r0, 5   ; 0x05
-    slli r5, r5, 4   ; 0x50
-    addi r5, r5, 0xa ; 0x5a
+    addi r5, r0, 0xf
 
     ; loop
-    WRITE_BLOCK()
+    SET_MMIO_LCD_BGFG_CUSTOM_TO_R4(0x0, 0xc) ; FG = light red, 3 instructions
+    WRITE_BLOCK() ; 20 instructions
     ; decrement counter
     addi r5, r5, -1
 
     ; if r5 == 0, pc += 4
     beq r5, r0, 4
 
-    ; jump to loop top (offset -48)
-    jmp r0, -48
+    ; jump to loop top (offset -50)
+    jmp r0, -50
+
+    ; =========== write 15 blocks (line 2) ===========
+    ; set counter to r5
+    addi r5, r0, 0xf
+
+    ; loop
+    SET_MMIO_LCD_BGFG_CUSTOM_TO_R4(0x0, 0xa) ; FG = light green, 3 instructions
+    WRITE_BLOCK() ; 20 instructions
+    ; decrement counter
+    addi r5, r5, -1
+
+    ; if r5 == 0, pc += 4
+    beq r5, r0, 4
+
+    ; jump to loop top (offset -52)
+    jmp r0, -52
+
+    ; =========== write 15 blocks (line 3) ===========
+    ; set counter to r5
+    addi r5, r0, 0xf
+
+    ; loop
+    SET_MMIO_LCD_BGFG_CUSTOM_TO_R4(0x0, 0xb) ; FG = light cyan, 3 instructions
+    WRITE_BLOCK() ; 20 instructions
+    ; decrement counter
+    addi r5, r5, -1
+
+    ; if r5 == 0, pc += 4
+    beq r5, r0, 4
+
+    ; jump to loop top (offset -52)
+    jmp r0, -52
+
+    ; =========== write 15 blocks (line 4) ===========
+    ; set counter to r5
+    addi r5, r0, 0xf
+
+    ; loop
+    SET_MMIO_LCD_BGFG_CUSTOM_TO_R4(0x0, 0xd) ; FG = light magenta, 3 instructions
+    WRITE_BLOCK() ; 20 instructions
+    ; decrement counter
+    addi r5, r5, -1
+
+    ; if r5 == 0, pc += 4
+    beq r5, r0, 4
+
+    ; jump to loop top (offset -52)
+    jmp r0, -52
+
+    ; =========== write 15 blocks (line 5) ===========
+    ; set counter to r5
+    addi r5, r0, 0xf
+
+    ; loop
+    SET_MMIO_LCD_BGFG_CUSTOM_TO_R4(0x0, 0x9) ; FG = light blue, 3 instructions
+    WRITE_BLOCK() ; 20 instructions
+    ; decrement counter
+    addi r5, r5, -1
+
+    ; if r5 == 0, pc += 4
+    beq r5, r0, 4
+
+    ; jump to loop top (offset -52)
+    jmp r0, -52
+
+    ; =========== write 15 blocks (line 6) ===========
+    ; set counter to r5
+    addi r5, r0, 0xf
+
+    ; loop
+    SET_MMIO_LCD_BGFG_CUSTOM_TO_R4(0x0, 0xe) ; FG = yellow, 3 instructions
+    WRITE_BLOCK() ; 20 instructions
+    ; decrement counter
+    addi r5, r5, -1
+
+    ; if r5 == 0, pc += 4
+    beq r5, r0, 4
+
+    ; jump to loop top (offset -52)
+    jmp r0, -52
 .end_macro
 
 .macro MOVE_PADDLE()
@@ -543,7 +624,7 @@
     add r2, r2, r1  ; 0xf004 + 0x0690 = 0xf694
 
     SET_MMIO_LCD_ASCII_SPACE_TO_R3()
-    SET_MMIO_LCD_BGFG_TO_R4()
+    SET_MMIO_LCD_BGFG_DEFAULT_TO_R4()
     or r3, r3, r4
 
     ; set decrement counter 60
@@ -611,7 +692,7 @@
     add  r2, r2, r3         ; address of old ball
 
     SET_MMIO_LCD_ASCII_SPACE_TO_R3()
-    SET_MMIO_LCD_BGFG_TO_R4()
+    SET_MMIO_LCD_BGFG_DEFAULT_TO_R4()
     or   r3, r3, r4
     sw   r3, r2, 0          ; clear old ball
 
@@ -735,7 +816,7 @@
     add  r2, r2, r3
 
     SET_MMIO_LCD_ASCII_o_TO_R3()
-    SET_MMIO_LCD_BGFG_TO_R4()
+    SET_MMIO_LCD_BGFG_DEFAULT_TO_R4()
     or   r3, r3, r4
     sw   r3, r2, 0          ; draw new ball
 
@@ -810,12 +891,12 @@
 
     ; if r1 == 1, pc += 14
     beq r1, r2, 14
-    ; jump to BLOCK_COLLISION (0x340)
-    addi r1, r0, 0x3
+    ; jump to BLOCK_COLLISION (0x458)
+    addi r1, r0, 0x4
     slli r1, r1, 4
-    addi r1, r1, 0x4
+    addi r1, r1, 0x5
     slli r1, r1, 4
-    addi r1, r1, 0x0
+    addi r1, r1, 0x8
     jmpr r0, r1, 0
     CLEAR_DISPLAY() ; 13 instructions
     SET_GAME_OVER_TITLE() ; 69 instructions
@@ -835,10 +916,10 @@ loop:
     GAME_OVER()
     BLOCK_COLLISION()
     DELAY()
-    ; jump to loop top (0x124)
-    addi r1, r0, 0x1
+    ; jump to loop top (0x23c)
+    addi r1, r0, 0x2
     slli r1, r1, 4
-    addi r1, r1, 0x2
+    addi r1, r1, 0x3
     slli r1, r1, 4
-    addi r1, r1, 0x4
+    addi r1, r1, 0xc
     jmpr r0, r1, 0
