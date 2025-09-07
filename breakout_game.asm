@@ -199,7 +199,7 @@
     slli r5, r5, 12  ; 0xe000
 .end_macro
 
-; 32767 * 8 counts delay
+; 32767 * 10 counts delay
 .macro DELAY()
     addi r6, r0, 0x7   ; 0x0007
     slli r6, r6, 4     ; 0x0070
@@ -209,7 +209,7 @@
     slli r6, r6, 4     ; 0x7ff0
     addi r6, r6, 0xf   ; 0x7fff
 
-    addi r7, r0, 0x8   ; 0x0008
+    addi r7, r0, 0xa   ; 0x000a
 
     addi r6, r6, -1
 
@@ -891,17 +891,23 @@
 
     ; if r1 == 1, pc += 14
     beq r1, r2, 14
-    ; jump to BLOCK_COLLISION (0x458)
+    ; jump to BLOCK_COLLISION (0x4b0)
     addi r1, r0, 0x4
     slli r1, r1, 4
-    addi r1, r1, 0x5
+    addi r1, r1, 0xb
     slli r1, r1, 4
-    addi r1, r1, 0x8
+    addi r1, r1, 0x0
     jmpr r0, r1, 0
     CLEAR_DISPLAY() ; 13 instructions
     SET_GAME_OVER_TITLE() ; 69 instructions
-    nop
-    jmp r0, -2
+    DELAY()
+    DELAY()
+    DELAY()
+    ; jump to RESET_TITLE (0x1a)
+    addi r1, r0, 0x1
+    slli r1, r1, 4
+    addi r1, r1, 0xa
+    jmpr r0, r1, 0
 .end_macro
 
 CLEAR_DISPLAY()
